@@ -29,6 +29,21 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://terrapayx.com',
     siteName: 'Terra Pay X',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Terra Pay X — Cloud-Native Payments Infrastructure',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terra Pay X — Cloud-Native Payments Infrastructure',
+    description:
+      'Secure, observable, and operationally resilient payments infrastructure built for reliability and intelligent operations.',
+    images: ['/og-image.png'],
   },
 };
 
