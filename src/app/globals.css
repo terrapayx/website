@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --color-bg: #020817;
+  --color-surface: #0D1426;
+  --color-border: #1C2E4A;
+  --color-text: #E2EBF8;
+  --color-muted: #64748B;
+  --color-accent: #38BDF8;
+  --color-secondary: #2DD4BF;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 3px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* Dot grid pattern for hero */
+.dot-grid {
+  background-image: radial-gradient(circle, #1C2E4A 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Radial glow for hero */
+.hero-glow {
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
+}
+
+/* Card hover glow */
+.card-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card-hover:hover {
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.12), 0 0 0 1px rgba(56, 189, 248, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Nav blur on scroll — handled via JS class toggle */
+.nav-scrolled {
+  background-color: rgba(2, 8, 23, 0.9) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
