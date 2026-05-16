@@ -9,6 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://terrapayx.com'),
   title: 'Terra Pay X — Cloud-Native Payments Infrastructure',
   description:
     'Terra Pay X builds secure, observable, and operationally resilient payments infrastructure powered by modern cloud architecture and governed AI engineering workflows.',
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
     description:
       'Secure, observable, and operationally resilient payments infrastructure built for reliability and intelligent operations.',
     type: 'website',
+    url: 'https://terrapayx.com',
     siteName: 'Terra Pay X',
   },
 };
