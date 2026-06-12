@@ -14,7 +14,7 @@ on:
 # are inlined here verbatim from ai-control-plane's reusable workflow so the
 # review runs in the website's own workflow context, where secrets and OIDC
 # work normally. When the reusable workflow changes, update this file to match.
-# Reusable workflow ref: terrapayx/ai-control-plane@e2bc891
+# Reusable workflow ref: terrapayx/ai-control-plane@3b9073f
 
 permissions:
   id-token: write
@@ -210,7 +210,7 @@ jobs:
               r"payment transition",
               r"outbox",
               r"processing recovery",
-              r"\bprocessing\b",
+              r"payment[- ]process",
               r"redis lock",
               r"\bdlq\b",
               r"dead[- ]letter",
@@ -261,30 +261,139 @@ jobs:
               r"fixture",
           ]
 
+          # Protected financial-domain service paths (Phase 2.6.2).
+          # A file in any of these is structural evidence of a financial-runtime change.
+          protected_domain_path_patterns = [
+              r"src/payments?/",
+              r"src/ledger/",
+              r"src/stripe",
+              r"src/reconcil",
+              r"src/outbox/",
+              r"src/billing/",
+              r"src/webhooks?/",
+              r"src/idempoten",
+              r"payment[- ]orchestrator",
+              r"payment[- ]service",
+              r"ledger[- ]service",
+              r"reconciliation[- ]service",
+              r"billing[- ]service",
+              r"outbox[- ]service",
+          ]
+
+          # Test/spec source paths — suppress L3 promotion for test-only changes (Phase 2.6.2).
+          test_code_path_patterns = [
+              r"\.test\.[jt]sx?$",
+              r"\.spec\.[jt]sx?$",
+              r"__tests__/",
+              r"/tests?/",
+              r"^tests?/",
+          ]
+
+          # Narrower financial patterns checked only against title+body (Phase 2.6.2).
+          # Represent unambiguous financial operations a developer writes when deliberately
+          # modifying financial runtime code. Excludes /financial/, /ledger/, /webhook/
+          # alone — too common in governance tooling descriptions and PR templates.
+          strong_financial_intent_patterns = [
+              r"\bstripe\b",
+              r"\bidempotenc",
+              r"\breconciliation\b",
+              r"payment state",
+              r"payment transition",
+              r"\boutbox\b",
+              r"\bdlq\b",
+              r"dead[- ]letter",
+              r"redis lock",
+              r"duplicate (charge|payment|ledger|posting)",
+              r"ledger posting",
+              r"money movement",
+          ]
+
+          # Observability-specific patterns for docsOnly→L2 promotion (Phase 2.6.2).
+          # Excludes /\btest\b/ and /\bspec\b/ — too broad for docs promotion.
+          observability_specific_patterns = [
+              r"smoke",
+              r"dashboard",
+              r"alarm",
+              r"metric",
+              r"logging",
+              r"tracing",
+              r"otel",
+              r"cloudwatch",
+              r"x-ray",
+          ]
+
+          # Code-level implementation signals (Phase 2.7a).
+          # Match constructs that appear in actual payment implementation diffs,
+          # not in marketing copy, PR template checkboxes, or documentation.
+          financial_implementation_patterns = [
+              r"payment_intent\.(create|succeeded|canceled|requires_action)",
+              r"ledger\.post\(",
+              r"ledger\.create\(",
+              r"createledgerentry",
+              r"publishoutboxevent",
+              r"outbox\.dispatch\(",
+              r"outbox\.publish\(",
+              r"idempotencystore\.",
+              r"idempotency[_-]key\s*=",
+              r"stripe\.charges\.create",
+              r"stripe\.paymentintents\.",
+              r"reconciliationworker",
+              r"prisma\.\$transaction",
+              r"redis\.lock\(",
+              r"handlewebhook\(",
+              r"processpayment\(",
+          ]
+
           docs_only = all_paths_match(docs_like_path_patterns)
           fixture_only = all_paths_match(fixture_path_patterns)
+          test_code_only = all_paths_match(test_code_path_patterns)
           workflow_changed = any_path_matches(workflow_path_patterns)
           infra_changed = any_path_matches(infra_path_patterns)
           service_code_changed = any_path_matches(service_code_path_patterns)
+          has_protected_domain_modification = any_path_matches(protected_domain_path_patterns)
 
           has_negative_production = has_any(full_text, negative_production_patterns)
           has_positive_production = has_any(full_text, positive_production_patterns)
           has_negative_financial = has_any(full_text, negative_financial_patterns)
           has_financial = has_any(full_text, financial_patterns)
+          has_financial_in_title_body = has_any(title_body, strong_financial_intent_patterns)
+          has_implementation_signals = has_any(full_text, financial_implementation_patterns)
           has_infra_security = has_any(full_text, infra_security_patterns)
           has_test_observability = has_any(full_text, test_observability_patterns)
+          has_observability_signal = has_any(full_text, observability_specific_patterns)
+
+          # Phase 2.7a: website domain suppression.
+          # The website repo is a static marketing site. Its PR template contains
+          # "Stripe" in Payment Scope Check checkboxes, making
+          # has_financial_in_title_body=True for every PR. Combined with financial
+          # vocabulary in marketing copy, the L5 guard fires unconditionally.
+          # Suppress L5 for website domain unless a protected domain path is
+          # modified or code-level implementation signals are present.
+          domain = "website"
+          website_l5_suppressed = (
+              domain == "website"
+              and not has_protected_domain_modification
+              and not has_implementation_signals
+          )
 
           reasons = []
           domains = set()
           required_reviewers = set()
 
           if has_positive_production and not (docs_only and has_negative_production):
-              level = "L6 Production Deployment"
               reasons.append("Positive production deployment/runtime/rollback intent detected.")
               domains.add("production")
               required_reviewers.update(["Release Agent", "Reviewer Agent", "Human reviewer"])
 
-          if has_financial and not (docs_only and has_negative_financial):
+          # L5 guard (Phase 2.6.2 + 2.7a): financial keywords must be corroborated
+          # by a structural anchor (protected domain path or strong financial intent
+          # in title/body) AND not suppressed by the website domain rule.
+          if (
+              has_financial
+              and (has_financial_in_title_body or has_protected_domain_modification)
+              and not (docs_only and has_negative_financial)
+              and not website_l5_suppressed
+          ):
               level = "L5 Financial-Critical"
               reasons.append("Payment, ledger, reconciliation, idempotency, recovery, or financial audit language detected.")
               domains.update(["payments", "ledger", "financial-correctness"])
@@ -302,16 +411,18 @@ jobs:
               domains.update(["infrastructure", "security", "workflow"])
               required_reviewers.update(["Platform Infra Agent", "Security Agent", "Reviewer Agent", "Human reviewer"])
 
-          elif service_code_changed:
+          elif service_code_changed and not test_code_only:
               level = "L3 Service Logic"
               reasons.append("Service or runtime code path detected.")
               domains.add("service-logic")
               required_reviewers.update(["Owning Service Agent", "Reviewer Agent"])
 
-          elif fixture_only or has_test_observability:
+          elif fixture_only or test_code_only or (has_observability_signal and docs_only) or (has_test_observability and not docs_only):
               level = "L2 Test / Observability"
               if fixture_only:
                   reasons.append("Only docs/test-evidence fixture content changed.")
+              elif test_code_only:
+                  reasons.append("Only test or spec code changed.")
               else:
                   reasons.append("Test, smoke, dashboard, alarm, metric, logging, tracing, or observability signal detected.")
               domains.update(["reliability", "observability"])
@@ -341,9 +452,13 @@ jobs:
                   "workflowChanged": workflow_changed,
                   "infraChanged": infra_changed,
                   "serviceCodeChanged": service_code_changed,
+                  "testCodeOnly": test_code_only,
                   "hasNegativeProduction": has_negative_production,
                   "hasPositiveProduction": has_positive_production,
                   "hasFinancial": has_financial,
+                  "hasFinancialInTitleBody": has_financial_in_title_body,
+                  "hasProtectedDomainModification": has_protected_domain_modification,
+                  "hasImplementationSignals": has_implementation_signals,
                   "hasInfraSecurity": has_infra_security,
                   "hasTestObservability": has_test_observability
               },
