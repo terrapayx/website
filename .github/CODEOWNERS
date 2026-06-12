@@ -1,0 +1,26 @@
+# Global owners — all changes require review
+* @terrapayx
+
+# ── Governance (must not be weakened without owner review) ───────────────────
+/.github/workflows/ai-governance-review.yml @terrapayx
+/.github/CODEOWNERS @terrapayx
+/.github/pull_request_template.md @terrapayx
+
+# ── All CI/CD workflows ───────────────────────────────────────────────────────
+/.github/workflows/ @terrapayx
+
+# ── Governance-sensitive application paths (L4+) ─────────────────────────────
+# Contact and booking forms — user data collection entry points
+/src/app/contact/ @terrapayx
+/src/app/book/ @terrapayx
+
+# API routes — any backend handler introduced here requires elevated review
+/src/app/api/ @terrapayx
+
+# ── Deployment and infrastructure configuration ───────────────────────────────
+/next.config.* @terrapayx
+/package.json @terrapayx
+/package-lock.json @terrapayx
+
+# ── Public assets ─────────────────────────────────────────────────────────────
+/public/ @terrapayx

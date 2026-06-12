@@ -1,0 +1,27 @@
+name: AI Governance Review
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+# Permissions mirror the reusable workflow's declared permissions exactly.
+# GitHub requires the caller to grant at minimum what the reusable workflow
+# declares; removing any of these causes startup_failure.
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  governance-review:
+    # Pinned to SHA 2db1290 (ai-control-plane main, 2026-06-08).
+    # Upgrades upload-artifact@v4 → @v7 (Node.js 24) to resolve deprecation warning.
+    uses: terrapayx/ai-control-plane/.github/workflows/ai-pr-review-reusable.yml@2db1290fc147cb8c9c22154a3d7c8d73b550f6ff
+    with:
+      domain: website
+    secrets: inherit
