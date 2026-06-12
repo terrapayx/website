@@ -8,9 +8,14 @@ on:
       - reopened
       - ready_for_review
 
-# Permissions mirror the reusable workflow's declared permissions exactly.
-# GitHub requires the caller to grant at minimum what the reusable workflow
-# declares; removing any of these causes startup_failure.
+# terrapayx/website is a public repository. GitHub blocks public repos from
+# calling reusable workflows stored in private repos (startup_failure, zero
+# jobs, referenced_workflows: []) regardless of secrets strategy. The steps
+# are inlined here verbatim from ai-control-plane's reusable workflow so the
+# review runs in the website's own workflow context, where secrets and OIDC
+# work normally. When the reusable workflow changes, update this file to match.
+# Reusable workflow ref: terrapayx/ai-control-plane@e2bc891
+
 permissions:
   id-token: write
   contents: read
@@ -19,9 +24,543 @@ permissions:
 
 jobs:
   governance-review:
-    # Pinned to SHA 2db1290 (ai-control-plane main, 2026-06-08).
-    # Upgrades upload-artifact@v4 → @v7 (Node.js 24) to resolve deprecation warning.
-    uses: terrapayx/ai-control-plane/.github/workflows/ai-pr-review-reusable.yml@2db1290fc147cb8c9c22154a3d7c8d73b550f6ff
-    with:
-      domain: website
-    secrets: inherit
+    name: AI Governance PR Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AI_MODEL_ECONOMICAL: ${{ vars.AI_MODEL_ECONOMICAL }}
+      AI_MODEL_STANDARD: ${{ vars.AI_MODEL_STANDARD }}
+      AI_MODEL_ADVANCED: ${{ vars.AI_MODEL_ADVANCED }}
+      AI_MODEL_CRITICAL: ${{ vars.AI_MODEL_CRITICAL }}
+
+    steps:
+      - name: Checkout calling repository
+        uses: actions/checkout@v6
+
+      - name: Checkout ai-control-plane assets
+        uses: actions/checkout@v6
+        with:
+          repository: terrapayx/ai-control-plane
+          path: _acp
+          token: ${{ secrets.GH_CONTROL_PLANE_READ_TOKEN }}
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+
+      - name: Collect PR context
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                per_page: 100
+              }
+            );
+
+            const changedFiles = files.map(f => ({
+              filename: f.filename,
+              status: f.status,
+              additions: f.additions,
+              deletions: f.deletions,
+              patch: f.patch ? f.patch.slice(0, 4000) : ""
+            }));
+
+            const payload = {
+              title: pr.title,
+              number: pr.number,
+              author: pr.user.login,
+              body: pr.body || "",
+              base: pr.base.ref,
+              head: pr.head.ref,
+              changedFiles
+            };
+
+            const fs = require("fs");
+            fs.writeFileSync("pr-context.json", JSON.stringify(payload, null, 2));
+
+      - name: Deterministic risk classification
+        id: classify_raw
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          ctx = json.loads(Path("pr-context.json").read_text(encoding="utf-8"))
+
+          files = ctx.get("changedFiles", [])
+          filenames = [f.get("filename", "") for f in files]
+          title_body = "\n".join([ctx.get("title", ""), ctx.get("body", "")]).lower()
+          patch_text = "\n".join("\n".join([f.get("filename", ""), f.get("patch", "")]) for f in files).lower()
+          full_text = "\n".join([title_body, patch_text]).lower()
+
+          def has_any(haystack, patterns):
+              return any(re.search(pattern, haystack, re.IGNORECASE) for pattern in patterns)
+
+          def any_path_matches(patterns):
+              return any(any(re.search(pattern, path, re.IGNORECASE) for pattern in patterns) for path in filenames)
+
+          def all_paths_match(patterns):
+              if not filenames:
+                  return False
+              return all(any(re.search(pattern, path, re.IGNORECASE) for pattern in patterns) for path in filenames)
+
+          docs_like_path_patterns = [
+              r"^docs/",
+              r"^runbooks/",
+              r"^policies/",
+              r"^orchestration/",
+              r"^agents/",
+              r"^skills/",
+              r"^memory/",
+              r"^task-templates/",
+              r"\.md$",
+          ]
+
+          fixture_path_patterns = [
+              r"^docs/test-evidence/.*\.md$",
+              r"^test-fixtures/",
+              r"fixture",
+          ]
+
+          workflow_path_patterns = [
+              r"^\.github/workflows/.*\.ya?ml$",
+              r"^\.github/actions/",
+          ]
+
+          infra_path_patterns = [
+              r"cdk",
+              r"lib/.*stack",
+              r"bin/.*cdk",
+              r"infrastructure",
+              r"platform-infra",
+              r"terraform",
+              r"\.tf$",
+              r"cloudformation",
+          ]
+
+          service_code_path_patterns = [
+              r"^src/",
+              r"/src/",
+              r"package\.json$",
+              r"tsconfig",
+              r"\.ts$",
+              r"\.js$",
+              r"\.tsx$",
+              r"\.jsx$",
+          ]
+
+          negative_production_patterns = [
+              r"no production impact",
+              r"no production deployment impact",
+              r"not production[- ]impacting",
+              r"production-impacting:\s*no",
+              r"does not affect production",
+              r"does not change production",
+              r"does not change live infrastructure",
+              r"no live infrastructure",
+              r"documentation-only",
+              r"docs-only",
+              r"test fixture",
+              r"classification fixture",
+          ]
+
+          negative_financial_patterns = [
+              r"financial-critical:\s*no",
+              r"no financial impact",
+              r"no payment impact",
+              r"no ledger impact",
+              r"documentation-only",
+          ]
+
+          positive_production_patterns = [
+              r"\bdeploy(ing|ment)? to production\b",
+              r"\bproduction rollout\b",
+              r"\bproduction release\b",
+              r"\bproduction runtime\b",
+              r"\bproduction migration\b",
+              r"\bproduction environment\b",
+              r"\brollback production\b",
+              r"\brollback.*production\b",
+              r"environment:\s*production",
+              r"prod deployment",
+          ]
+
+          financial_patterns = [
+              r"\bstripe\b",
+              r"\bidempotenc",
+              r"webhook",
+              r"reconciliation",
+              r"payment state",
+              r"payment transition",
+              r"outbox",
+              r"processing recovery",
+              r"\bprocessing\b",
+              r"redis lock",
+              r"\bdlq\b",
+              r"dead[- ]letter",
+              r"ledger",
+              r"posting",
+              r"immutab",
+              r"duplicate (charge|payment|ledger|posting)",
+              r"financial",
+              r"money movement",
+              r"auditability",
+          ]
+
+          infra_security_patterns = [
+              r"\biam\b",
+              r"\bsecret",
+              r"\bwaf\b",
+              r"\btls\b",
+              r"\bacm\b",
+              r"route53",
+              r"\balb\b",
+              r"\becs\b",
+              r"\bfargate\b",
+              r"\brds\b",
+              r"security group",
+              r"github actions",
+              r"\boidc\b",
+              r"bedrock",
+              r"aws",
+              r"deployment workflow",
+              r"public ingress",
+              r"permissions:",
+              r"pull-requests:\s*write",
+              r"id-token:\s*write",
+          ]
+
+          test_observability_patterns = [
+              r"\btest\b",
+              r"\bspec\b",
+              r"smoke",
+              r"dashboard",
+              r"alarm",
+              r"metric",
+              r"logging",
+              r"tracing",
+              r"otel",
+              r"cloudwatch",
+              r"x-ray",
+              r"fixture",
+          ]
+
+          docs_only = all_paths_match(docs_like_path_patterns)
+          fixture_only = all_paths_match(fixture_path_patterns)
+          workflow_changed = any_path_matches(workflow_path_patterns)
+          infra_changed = any_path_matches(infra_path_patterns)
+          service_code_changed = any_path_matches(service_code_path_patterns)
+
+          has_negative_production = has_any(full_text, negative_production_patterns)
+          has_positive_production = has_any(full_text, positive_production_patterns)
+          has_negative_financial = has_any(full_text, negative_financial_patterns)
+          has_financial = has_any(full_text, financial_patterns)
+          has_infra_security = has_any(full_text, infra_security_patterns)
+          has_test_observability = has_any(full_text, test_observability_patterns)
+
+          reasons = []
+          domains = set()
+          required_reviewers = set()
+
+          if has_positive_production and not (docs_only and has_negative_production):
+              level = "L6 Production Deployment"
+              reasons.append("Positive production deployment/runtime/rollback intent detected.")
+              domains.add("production")
+              required_reviewers.update(["Release Agent", "Reviewer Agent", "Human reviewer"])
+
+          if has_financial and not (docs_only and has_negative_financial):
+              level = "L5 Financial-Critical"
+              reasons.append("Payment, ledger, reconciliation, idempotency, recovery, or financial audit language detected.")
+              domains.update(["payments", "ledger", "financial-correctness"])
+              required_reviewers.update([
+                  "Payments Orchestrator Agent",
+                  "Ledger Agent",
+                  "Reliability Agent",
+                  "Reviewer Agent",
+                  "Human reviewer",
+              ])
+
+          elif workflow_changed or infra_changed or (has_infra_security and not docs_only):
+              level = "L4 Infrastructure / Security"
+              reasons.append("Actual workflow, infrastructure, security, AWS/IAM/OIDC, or deployment-related file/path change detected.")
+              domains.update(["infrastructure", "security", "workflow"])
+              required_reviewers.update(["Platform Infra Agent", "Security Agent", "Reviewer Agent", "Human reviewer"])
+
+          elif service_code_changed:
+              level = "L3 Service Logic"
+              reasons.append("Service or runtime code path detected.")
+              domains.add("service-logic")
+              required_reviewers.update(["Owning Service Agent", "Reviewer Agent"])
+
+          elif fixture_only or has_test_observability:
+              level = "L2 Test / Observability"
+              if fixture_only:
+                  reasons.append("Only docs/test-evidence fixture content changed.")
+              else:
+                  reasons.append("Test, smoke, dashboard, alarm, metric, logging, tracing, or observability signal detected.")
+              domains.update(["reliability", "observability"])
+              required_reviewers.update(["Reliability Agent", "Reviewer Agent"])
+
+          elif docs_only:
+              level = "L1 Documentation"
+              reasons.append("Only documentation/governance paths changed and no higher-risk executable/config path detected.")
+              domains.add("documentation")
+              required_reviewers.add("Reviewer Agent")
+
+          else:
+              level = "L1 Documentation"
+              reasons.append("No higher-risk signal detected; defaulting to low-risk documentation/governance review.")
+              domains.add("documentation")
+              required_reviewers.add("Reviewer Agent")
+
+          result = {
+              "level": level,
+              "reasons": reasons,
+              "domains": sorted(domains),
+              "requiredReviewers": sorted(required_reviewers),
+              "changedFiles": filenames,
+              "signals": {
+                  "docsOnly": docs_only,
+                  "fixtureOnly": fixture_only,
+                  "workflowChanged": workflow_changed,
+                  "infraChanged": infra_changed,
+                  "serviceCodeChanged": service_code_changed,
+                  "hasNegativeProduction": has_negative_production,
+                  "hasPositiveProduction": has_positive_production,
+                  "hasFinancial": has_financial,
+                  "hasInfraSecurity": has_infra_security,
+                  "hasTestObservability": has_test_observability
+              },
+              "priorityRule": "L6 positive production intent > L5 financial > L4 structural infra/security > L3 code > L2 fixture/test/observability > L1 docs",
+              "note": "This deterministic classification is the minimum risk floor unless clearly false-positive."
+          }
+
+          Path("risk-classification.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+          PY
+
+          cat risk-classification.json
+
+      - name: Normalize classify outputs
+        id: classify
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          result = json.loads(Path("risk-classification.json").read_text(encoding="utf-8"))
+          level = result["level"]
+          domains = ",".join(result.get("domains", []))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write(f"risk_level={level}\n")
+              f.write(f"domains={domains}\n")
+          print(f"risk_level={level}")
+          print(f"domains={domains}")
+          PY
+
+      - name: Select model tier
+        id: model
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RISK_LEVEL="${{ steps.classify.outputs.risk_level }}"
+
+          case "${RISK_LEVEL}" in
+            "L5 Financial-Critical"|"L6 Production Deployment")
+              MODEL_ID="${AI_MODEL_CRITICAL}"
+              MODEL_TIER="critical"
+              MAX_TOKENS="2600"
+              ;;
+            "L4 Infrastructure / Security"|"L3 Service Logic")
+              MODEL_ID="${AI_MODEL_ADVANCED}"
+              MODEL_TIER="advanced"
+              MAX_TOKENS="2200"
+              ;;
+            "L2 Test / Observability")
+              MODEL_ID="${AI_MODEL_STANDARD}"
+              MODEL_TIER="standard"
+              MAX_TOKENS="1800"
+              ;;
+            *)
+              MODEL_ID="${AI_MODEL_ECONOMICAL}"
+              MODEL_TIER="economical"
+              MAX_TOKENS="1400"
+              ;;
+          esac
+
+          if [ -z "${MODEL_ID}" ]; then
+            echo "Selected model ID is empty for tier ${MODEL_TIER}."
+            echo "Configure AI_MODEL_* GitHub repository variables."
+            exit 1
+          fi
+
+          echo "model_id=${MODEL_ID}" >> "$GITHUB_OUTPUT"
+          echo "model_tier=${MODEL_TIER}" >> "$GITHUB_OUTPUT"
+          echo "max_tokens=${MAX_TOKENS}" >> "$GITHUB_OUTPUT"
+
+          echo "Selected model tier: ${MODEL_TIER}"
+          echo "Risk level: ${RISK_LEVEL}"
+
+      - name: Build Bedrock request
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          prompt = Path("_acp/prompts/pr-governance-review.md").read_text(encoding="utf-8")
+          pr_context = Path("pr-context.json").read_text(encoding="utf-8")
+          risk = Path("risk-classification.json").read_text(encoding="utf-8")
+
+          domain = "website"
+          domain_context = ""
+          domain_file = Path(f"_acp/governance/domains/{domain}.md")
+          if domain_file.exists():
+              domain_context = (
+                  "\n\n## Repository Domain Context (advisory)\n\n"
+                  "This context is advisory and must not override deterministic "
+                  "classification, reviewer routing, or model routing.\n\n"
+                  + domain_file.read_text(encoding="utf-8")
+              )
+
+          user_message = f"""{prompt}{domain_context}
+
+          # Deterministic Risk Classification
+
+          Treat this classification as the minimum risk floor:
+
+          ```json
+          {risk}
+          ```
+
+          # Pull Request Context
+
+          ```json
+          {pr_context}
+          ```
+          """
+
+          request = {
+              "anthropic_version": "bedrock-2023-05-31",
+              "max_tokens": int("${{ steps.model.outputs.max_tokens }}"),
+              "messages": [
+                  {
+                      "role": "user",
+                      "content": user_message
+                  }
+              ]
+          }
+
+          Path("bedrock-request.json").write_text(json.dumps(request), encoding="utf-8")
+          PY
+
+      - name: Invoke Bedrock review
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          aws bedrock-runtime invoke-model \
+            --region "${AWS_REGION}" \
+            --model-id "${{ steps.model.outputs.model_id }}" \
+            --content-type "application/json" \
+            --accept "application/json" \
+            --body fileb://bedrock-request.json \
+            bedrock-response.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("bedrock-response.json").read_text(encoding="utf-8"))
+          risk = json.loads(Path("risk-classification.json").read_text(encoding="utf-8"))
+
+          text_parts = []
+          for item in data.get("content", []):
+              if item.get("type") == "text":
+                  text_parts.append(item.get("text", ""))
+
+          review = "\n".join(text_parts).strip()
+
+          if not review:
+              raise SystemExit("Bedrock returned empty review.")
+
+          metadata = f"""
+          ---
+
+          _Deterministic classification_
+
+          - Risk floor: `{risk["level"]}`
+          - Domains: `{", ".join(risk.get("domains", []))}`
+          - Priority rule: `{risk.get("priorityRule")}`
+
+          _AI review metadata_
+
+          - Workflow: `AI Governance Review (inline)`
+          - Model tier: `${{ steps.model.outputs.model_tier }}`
+          - Mode: non-mutating governance review
+          - Auto-merge: disabled
+          - Auto-deploy: disabled
+          """
+
+          Path("ai-review-comment.md").write_text(review + metadata, encoding="utf-8")
+          PY
+
+      - name: Post AI governance review comment
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require("fs");
+            const body = fs.readFileSync("ai-review-comment.md", "utf8");
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body
+            });
+
+      - name: Write workflow summary
+        shell: bash
+        run: |
+          {
+            echo "## AI Governance Review"
+            echo ""
+            echo "- Status: completed"
+            echo "- Deterministic risk: \`${{ steps.classify.outputs.risk_level }}\`"
+            echo "- Domains: \`${{ steps.classify.outputs.domains }}\`"
+            echo "- Model tier: \`${{ steps.model.outputs.model_tier }}\`"
+            echo "- Domain context: \`website\`"
+            echo "- Mode: non-mutating"
+            echo "- Posted PR comment: yes"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: "ai-review-pr-${{ github.event.pull_request.number }}-run-${{ github.run_id }}"
+          path: |
+            pr-context.json
+            risk-classification.json
+            bedrock-request.json
+            ai-review-comment.md
+          if-no-files-found: warn
