@@ -19,9 +19,12 @@ permissions:
 
 jobs:
   governance-review:
-    # Pinned to SHA 2db1290 (ai-control-plane main, 2026-06-08).
-    # Upgrades upload-artifact@v4 → @v7 (Node.js 24) to resolve deprecation warning.
-    uses: terrapayx/ai-control-plane/.github/workflows/ai-pr-review-reusable.yml@2db1290fc147cb8c9c22154a3d7c8d73b550f6ff
+    # Pinned to SHA e2bc891 (ai-control-plane main, 2026-06-12).
+    # Declares workflow_call secrets explicitly — required for public repos
+    # calling private reusable workflows (secrets: inherit is blocked by GitHub).
+    uses: terrapayx/ai-control-plane/.github/workflows/ai-pr-review-reusable.yml@e2bc891c018cb315edd88e42b1f64c795bfc216c
     with:
       domain: website
-    secrets: inherit
+    secrets:
+      GH_CONTROL_PLANE_READ_TOKEN: ${{ secrets.GH_CONTROL_PLANE_READ_TOKEN }}
+      AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
