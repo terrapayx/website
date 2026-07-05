@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://terrapayx.internal/growth-observation/schemas/observation-event.schema.json",
+  "title": "Canonical Observation Event",
+  "description": "Terra Pay X canonical observation event (GIP-1-A). A strict envelope with an open metadata body. Top-level fields are fixed; 'metadata' is the sanctioned open extension point. The event carries observed facts only — never scores, verdicts, confidence, or interpretation (interpretation lives downstream in CGP-3's Confidence Assessment). Contract version 1.0.0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "eventType", "occurredAt", "schemaVersion"],
+  "allOf": [
+    {
+      "description": "Identity anchor rule: at least one of visitorId, userId, or organizationId must be present, so every observation is attributable.",
+      "anyOf": [
+        { "required": ["visitorId"] },
+        { "required": ["userId"] },
+        { "required": ["organizationId"] }
+      ]
+    }
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique, producer-generated id for this single observation. Idempotency key: redelivery of the same eventId is the same observation and must be de-duplicated downstream.",
+      "minLength": 1
+    },
+    "eventType": {
+      "type": "string",
+      "description": "Canonical event name: domain.entity.action, lowercase, past-tense action. Domain is one of the six canonical domains. A product may only emit a value already defined in the contract (the standing contract-first rule).",
+      "pattern": "^(acquisition|engagement|commerce|identity|experiment|operational)(\\.[a-z][a-z0-9]*){2,}$"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the observed thing happened (event time, not ingest time). RFC 3339 / ISO 8601 with an explicit offset; UTC 'Z' preferred."
+    },
+    "schemaVersion": {
+      "type": "string",
+      "description": "Semantic version of the observation contract this event conforms to.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "visitorId": {
+      "type": "string",
+      "description": "Anonymous, pseudonymous device/browser/agent identity. Root of the identity progression.",
+      "minLength": 1
+    },
+    "sessionId": {
+      "type": "string",
+      "description": "One bounded interaction under a visitorId.",
+      "minLength": 1
+    },
+    "userId": {
+      "type": "string",
+      "description": "Identified/authenticated person. Its co-presence with visitorId is the stitching signal.",
+      "minLength": 1
+    },
+    "organizationId": {
+      "type": "string",
+      "description": "Tenant/account the user belongs to. Maps to merchantId in Terra Pay X merchant tenancy. Frequently the sole anchor on operational (system-origin) events.",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string",
+      "description": "Marketing acquisition origin (e.g. google, newsletter, referral, direct). NOT the origin system (which is sourcePlatform in the commerce schema)."
+    },
+    "medium": {
+      "type": "string",
+      "description": "Channel class of the acquisition origin (e.g. organic, cpc, email, social, referral, direct)."
+    },
+    "campaignId": {
+      "type": "string",
+      "description": "Stable id (not display name) of the campaign that produced the touch."
+    },
+    "experimentId": {
+      "type": "string",
+      "description": "Experiment the actor is enrolled in for this event (GI-4 traceability)."
+    },
+    "variantId": {
+      "type": "string",
+      "description": "Variant/arm of experimentId shown to the actor. Meaningful only alongside experimentId."
+    },
+    "page": {
+      "type": "object",
+      "description": "Web/screen context where the event occurred. Surface (web vs app) lives here, never in the event name.",
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string" },
+        "path": { "type": "string" },
+        "referrer": { "type": "string" },
+        "title": { "type": "string" }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "description": "The domain object the event concerns (e.g. checkout, order, product, paymentLink).",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string" },
+        "id": { "type": "string" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Open extension point: free-form, event-specific observed facts (never interpretation). Keys are lowerCamelCase; monetary values are integer minor units with an explicit currency, never floats.",
+      "additionalProperties": true
+    }
+  }
+}

@@ -110,15 +110,30 @@ function CheckIcon() {
 function PrimaryCta({ className }: { className?: string }) {
   const classes = `px-7 py-3 rounded-lg text-sm font-semibold ${className ?? ''}`.trim();
   // External configured payment link vs. internal fallback route.
+  // Observation markers (GIP-1-B) are declarative and additive: they bind this
+  // element to the Primary Commerce CTA surface so the ObservationProvider emits
+  // commerce.checkout.started on click. They do not change the CTA's behavior.
   if (ctaConfigured) {
     return (
-      <a href={ctaHref} className={classes} style={{ background: accent, color: bg }}>
+      <a
+        href={ctaHref}
+        className={classes}
+        style={{ background: accent, color: bg }}
+        data-observe-surface="commerce-cta"
+        data-observe-product="ai-engineering-starter-kit"
+      >
         Get the Starter Kit
       </a>
     );
   }
   return (
-    <Link href={ctaHref} className={classes} style={{ background: accent, color: bg }}>
+    <Link
+      href={ctaHref}
+      className={classes}
+      style={{ background: accent, color: bg }}
+      data-observe-surface="commerce-cta"
+      data-observe-product="ai-engineering-starter-kit"
+    >
       Get the Starter Kit
     </Link>
   );
@@ -126,7 +141,9 @@ function PrimaryCta({ className }: { className?: string }) {
 
 export default function AiEngineeringStarterKitPage() {
   return (
-    <main>
+    // Observation marker (GIP-1-B): binds the page to the Product surface so the
+    // ObservationProvider emits engagement.product.viewed. Additive only.
+    <main data-observe-surface="product" data-observe-product="ai-engineering-starter-kit">
       {/* Hero */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden" style={{ background: bg }}>
         <div className="absolute inset-0 dot-grid opacity-40 pointer-events-none" />

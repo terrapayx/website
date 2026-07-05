@@ -1,0 +1,17 @@
+{
+  "eventId": "9d1f4c8a-2b6e-4a30-9c71-5e2a0f7b3d84",
+  "eventType": "acquisition.visit.landed",
+  "occurredAt": "2026-07-05T04:10:02.114Z",
+  "schemaVersion": "1.0.0",
+  "visitorId": "v_a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "sessionId": "s_0f1e2d3c-4b5a-4968-8776-5544332211aa",
+  "source": "google",
+  "medium": "cpc",
+  "campaignId": "starter_kit_founding",
+  "page": {
+    "url": "https://terrapayx.com/?utm_source=google&utm_medium=cpc&utm_campaign=starter_kit_founding",
+    "path": "/",
+    "referrer": "https://www.google.com/",
+    "title": "Terra Pay X — Cloud-Native Payments Infrastructure"
+  }
+}

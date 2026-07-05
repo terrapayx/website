@@ -1,0 +1,17 @@
+{
+  "eventId": "b2c7e0a4-3d19-4f52-8a6b-1c9e4d7f2b30",
+  "eventType": "engagement.page.viewed",
+  "occurredAt": "2026-07-05T04:10:47.902Z",
+  "schemaVersion": "1.0.0",
+  "visitorId": "v_a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "sessionId": "s_0f1e2d3c-4b5a-4968-8776-5544332211aa",
+  "source": "google",
+  "medium": "cpc",
+  "campaignId": "starter_kit_founding",
+  "page": {
+    "url": "https://terrapayx.com/products/ai-engineering-starter-kit/",
+    "path": "/products/ai-engineering-starter-kit/",
+    "referrer": "https://terrapayx.com/",
+    "title": "AI Engineering System Starter Kit — Terra Pay X"
+  }
+}
