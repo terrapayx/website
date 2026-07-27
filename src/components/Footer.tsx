@@ -12,6 +12,8 @@ const footerSections = [
     title: 'Labs',
     links: [
       { label: 'Labs Overview', href: '/labs' },
+      // D7 (RI-2 acceptance criteria): the Starter Kit had no footer entry.
+      { label: 'AI Engineering Starter Kit', href: '/products/ai-engineering-starter-kit' },
       { label: 'Services', href: '/services' },
       { label: 'Solutions', href: '/solutions' },
       { label: 'Articles', href: '/articles' },
@@ -23,7 +25,10 @@ const footerSections = [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
       { label: 'GitHub', href: 'https://github.com/terrapayx' },
-      { label: 'contact@terrapayx.com', href: 'mailto:contact@terrapayx.com' },
+      // labs@ is canonical (Founder decision D1, 2026-07-27): it is the only
+      // Terra Pay X address with positive evidence of receiving mail. contact@
+      // is not provisioned-verified and is therefore not published.
+      { label: 'labs@terrapayx.com', href: 'mailto:labs@terrapayx.com' },
     ],
   },
 ];
@@ -76,8 +81,11 @@ export default function Footer() {
           className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
           style={{ borderTop: '1px solid #1C2E4A' }}
         >
+          {/* Legal entity. "Terra Pay X, Inc." is the registered name evidenced by the
+              Stripe account (US corporation) and the Relay business banking relationship.
+              The wordmark above remains the brand; this line carries the legal identity. */}
           <p className="text-xs" style={{ color: '#64748B' }}>
-            &copy; 2026 Terra Pay X. All rights reserved.
+            &copy; 2026 Terra Pay X, Inc. All rights reserved.
           </p>
           <p className="text-xs" style={{ color: '#64748B' }}>
             Terra Pay X Labs — Advisory &amp; Innovation Division

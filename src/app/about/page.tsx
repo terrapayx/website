@@ -59,10 +59,15 @@ const timeline = [
     title: 'Terra Pay X Labs division launched',
     desc: 'Labs was created as the advisory and innovation arm — a way to generate early revenue and serve organizations actively working to deploy AI while Terra Pay X Core continues development.',
   },
+  // RI-1 / decision D3 (Founder, 2026-07-27): the previous entry claimed Labs was
+  // "running active engagements". That claim could not be substantiated from the
+  // operational record, so it is replaced with statements the record supports.
+  // If recurring client delivery later becomes an evidenced business activity,
+  // engagement language can be restored with a documented basis.
   {
     period: 'Today',
-    title: 'Active engagements and internal programs',
-    desc: 'Labs is running active engagements in AI workforce design, governance engineering, and multi-agent architecture — with the Terra Pay X Platform Program as our primary internal reference implementation.',
+    title: 'Building, validating, and proving in production',
+    desc: 'Labs is building governed AI and commerce capabilities, developing products, and validating them against production evidence — with the Terra Pay X Platform Program as the primary reference implementation. Live payment capture and end-to-end treasury settlement are both validated on production infrastructure.',
   },
 ];
 

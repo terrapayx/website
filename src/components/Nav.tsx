@@ -4,9 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+// D7 (RI-2 acceptance criteria): the Starter Kit was reachable only by typing the
+// URL — absent from navigation, the homepage, and the footer. A payment link can
+// exist forever without making a product purchasable; a product is purchasable
+// only when a visitor can discover it and complete the purchase. Discoverability
+// is therefore an acceptance criterion of RI-2, not an adjacent concern.
 const navLinks = [
   { label: 'Platform', href: '/platform' },
   { label: 'Labs', href: '/labs' },
+  { label: 'Starter Kit', href: '/products/ai-engineering-starter-kit' },
   { label: 'Articles', href: '/articles' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
