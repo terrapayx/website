@@ -362,9 +362,19 @@ export default function AiEngineeringStarterKitPage() {
               {PRICE_NOTE}
             </span>
           </div>
+          {/* RI-2: "delivered electronically after purchase — there is nothing to ship" read as
+              immediate. The actual process (FRPE-001 delivery runbook) sends the package after
+              payment verification. Founder's formulation, 2026-07-27.
+
+              Deliberately states no delivery timeframe. SPV-1 measured settlement once, at two
+              days, and recorded that n = 1 is not an expectation. A supportable timing promise
+              needs either more settlement observations or an explicit Founder service-level
+              commitment — a commitment is a decision, not an observation, and must not be
+              derived from a single measurement. */}
           <p className="text-base leading-relaxed" style={{ color: textMuted }}>
-            One payment. Lifetime access to v1.0 of the kit and its templates. This is a digital
-            product, delivered electronically after purchase — there is nothing to ship.
+            One payment. Lifetime access to v1.0 of the kit and its templates. Digital delivery
+            begins after payment verification — the kit is sent to you by email, and we confirm
+            receipt.
           </p>
           <PrimaryCta />
           {!ctaConfigured && (
