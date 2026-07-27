@@ -23,7 +23,10 @@ const footerSections = [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
       { label: 'GitHub', href: 'https://github.com/terrapayx' },
-      { label: 'contact@terrapayx.com', href: 'mailto:contact@terrapayx.com' },
+      // labs@ is canonical (Founder decision D1, 2026-07-27): it is the only
+      // Terra Pay X address with positive evidence of receiving mail. contact@
+      // is not provisioned-verified and is therefore not published.
+      { label: 'labs@terrapayx.com', href: 'mailto:labs@terrapayx.com' },
     ],
   },
 ];

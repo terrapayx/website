@@ -326,18 +326,26 @@ function EngineeringFoundation() {
 
 // ─── Programs ─────────────────────────────────────────────────────────────────
 
+// RI-1 / decision D3 (Founder, 2026-07-27): two of these cards previously read
+// "deployed for a technical operations team" and "deployed across teams", and the
+// section was framed as "Programs & Work / Representative programs" — all of which
+// a reader takes as claims about delivered client work. Those claims could not be
+// substantiated from the operational record. The cards now describe capabilities
+// Terra Pay X has built and operates itself, which is verifiable: the governance
+// workflows run as required checks on protected branches across the public
+// terrapayx GitHub organization.
 const programs = [
   {
     tag: 'AI Engineering',
     title: 'AI Engineering System',
-    desc: 'Governed AI engineering workflow deployed for a technical operations team — structured delivery with review boundaries and audit trail.',
+    desc: 'Governed AI engineering workflow — structured delivery with explicit review boundaries, risk classification, and an audit trail. Operating across Terra Pay X repositories.',
     division: 'Labs',
     divisionColor: secondary,
   },
   {
     tag: 'Governance',
     title: 'Governance Automation',
-    desc: 'AI governance framework with risk classification, approval workflows, and compliance documentation deployed across teams.',
+    desc: 'AI governance framework with risk classification, approval workflows, and compliance documentation — enforced as required checks on protected branches.',
     division: 'Labs',
     divisionColor: secondary,
   },
@@ -366,13 +374,13 @@ function Programs() {
             className="text-xs font-semibold tracking-widest uppercase mb-4"
             style={{ color: accent }}
           >
-            Programs & Work
+            Capabilities
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: textPrimary }}>
             AI execution in practice
           </h2>
           <p className="mt-3 text-base max-w-xl mx-auto" style={{ color: textMuted }}>
-            Representative programs reflecting our methodology across Platform and Labs.
+            The systems our methodology produces — built and operated inside Terra Pay X.
           </p>
         </div>
 
