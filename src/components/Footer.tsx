@@ -12,6 +12,8 @@ const footerSections = [
     title: 'Labs',
     links: [
       { label: 'Labs Overview', href: '/labs' },
+      // D7 (RI-2 acceptance criteria): the Starter Kit had no footer entry.
+      { label: 'AI Engineering Starter Kit', href: '/products/ai-engineering-starter-kit' },
       { label: 'Services', href: '/services' },
       { label: 'Solutions', href: '/solutions' },
       { label: 'Articles', href: '/articles' },

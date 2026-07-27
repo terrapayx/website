@@ -48,6 +48,14 @@ function Hero() {
           operational architectures through Terra Pay X Labs.
         </p>
 
+        {/* D7 (RI-2 acceptance criteria): the homepage previously offered no path to the
+            only purchasable product — every CTA led to the advisory funnel. The product
+            CTA is ADDED alongside the advisory CTAs, not in place of them.
+
+            No observation marker is attached. `engagement.cta.clicked` is not yet
+            ratified in growth-observation (RI-3A §5), and the client validates before
+            emission — a marker for an unratified surface would emit nothing. Homepage
+            CTA instrumentation is FOP-2, delivered by RI-3B after ratification. */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
           <Link
             href="/book"
@@ -55,6 +63,13 @@ function Hero() {
             style={{ background: accent, color: bg }}
           >
             Book a Strategy Session
+          </Link>
+          <Link
+            href="/products/ai-engineering-starter-kit"
+            className="px-7 py-3 rounded-lg text-sm font-semibold transition-all duration-200"
+            style={{ border: `1px solid ${secondary}`, color: secondary }}
+          >
+            Get the Starter Kit
           </Link>
           <Link
             href="#divisions"
