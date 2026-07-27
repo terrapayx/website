@@ -21,6 +21,11 @@ export const Surface = {
   PRODUCT: 'product',
   COMMERCE_CTA: 'commerce-cta',
   CHECKOUT: 'checkout',
+  // ── FRPE-RI-3B ─────────────────────────────────────────────────────────────
+  /** Any call-to-action, including advisory ones. FOP-2. */
+  CTA: 'cta',
+  /** A page section whose visibility is the engagement-depth signal. FOP-3. */
+  SECTION: 'section',
 } as const;
 
 export type ObservationSurface = (typeof Surface)[keyof typeof Surface];
@@ -31,6 +36,12 @@ export const DataAttr = {
   SURFACE: 'data-observe-surface',
   /** Identifies the product a surface concerns, e.g. `data-observe-product="ai-engineering-starter-kit"`. */
   PRODUCT: 'data-observe-product',
+  /**
+   * Identifies WHICH cta/section this element is, e.g. `data-observe-id="hero-starter-kit"`.
+   * This is deliberately a field value, not part of the event name: a name per
+   * section would be unbounded cardinality, which the naming standard forbids.
+   */
+  ID: 'data-observe-id',
 } as const;
 
 /**
@@ -47,7 +58,22 @@ export const VIEW_SURFACE_EVENTS: Partial<Record<ObservationSurface, Observation
  */
 export const CLICK_SURFACE_EVENTS: Partial<Record<ObservationSurface, ObservationEventType>> = {
   [Surface.COMMERCE_CTA]: EventType.COMMERCE_CHECKOUT_STARTED,
+  [Surface.CTA]: EventType.ENGAGEMENT_CTA_CLICKED,
 };
+
+/**
+ * Surfaces observed by viewport intersection rather than by route change.
+ * This is the engagement-depth signal (FOP-3) — the only thing that separates
+ * "did not arrive" from "arrived and rejected", which demand opposite remedies.
+ */
+export const INTERSECT_SURFACE_EVENTS: Partial<Record<ObservationSurface, ObservationEventType>> = {
+  [Surface.SECTION]: EventType.ENGAGEMENT_SECTION_VIEWED,
+};
+
+/** CSS selector matching any element observed by intersection. */
+export const INTERSECT_SURFACE_SELECTOR = Object.keys(INTERSECT_SURFACE_EVENTS)
+  .map((s) => `[${DataAttr.SURFACE}="${s}"]`)
+  .join(',');
 
 /** CSS selector matching any element bound to a click surface. */
 export const CLICK_SURFACE_SELECTOR = Object.keys(CLICK_SURFACE_EVENTS)

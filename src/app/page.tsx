@@ -12,7 +12,13 @@ const textMuted = '#64748B';
 
 function Hero() {
   return (
+    // RI-3B / FOP-3: the engagement-depth signal. This is the only marker that
+    // separates "did not arrive" from "arrived and rejected" — two outcomes that
+    // demand opposite remedies and are otherwise indistinguishable in a funnel
+    // that only counts purchases.
     <section
+      data-observe-surface="section"
+      data-observe-id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-16 overflow-hidden"
       style={{ background: bg }}
     >
@@ -52,15 +58,18 @@ function Hero() {
             only purchasable product — every CTA led to the advisory funnel. The product
             CTA is ADDED alongside the advisory CTAs, not in place of them.
 
-            No observation marker is attached. `engagement.cta.clicked` is not yet
-            ratified in growth-observation (RI-3A §5), and the client validates before
-            emission — a marker for an unratified surface would emit nothing. Homepage
-            CTA instrumentation is FOP-2, delivered by RI-3B after ratification. */}
+            RI-3B / FOP-2: all three now carry `data-observe-surface="cta"`. Until this
+            delivery the site's primary calls to action were entirely unobservable —
+            `commerce.checkout.started` covered only the product-page CTA. The id is a
+            data attribute rather than part of the event name, because a name per CTA
+            would be unbounded cardinality. */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
           <Link
             href="/book"
             className="px-7 py-3 rounded-lg text-sm font-semibold transition-all duration-200"
             style={{ background: accent, color: bg }}
+            data-observe-surface="cta"
+            data-observe-id="hero-strategy-session"
           >
             Book a Strategy Session
           </Link>
@@ -68,6 +77,8 @@ function Hero() {
             href="/products/ai-engineering-starter-kit"
             className="px-7 py-3 rounded-lg text-sm font-semibold transition-all duration-200"
             style={{ border: `1px solid ${secondary}`, color: secondary }}
+            data-observe-surface="cta"
+            data-observe-id="hero-starter-kit"
           >
             Get the Starter Kit
           </Link>
@@ -75,6 +86,8 @@ function Hero() {
             href="#divisions"
             className="px-7 py-3 rounded-lg text-sm font-semibold transition-all duration-200"
             style={{ border: `1px solid ${border}`, color: textPrimary }}
+            data-observe-surface="cta"
+            data-observe-id="hero-explore-work"
           >
             Explore Our Work
           </Link>

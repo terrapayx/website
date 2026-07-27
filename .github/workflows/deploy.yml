@@ -35,6 +35,15 @@ jobs:
           # repo variable to the live Starter Kit payment link; when unset, the CTA
           # falls back to /contact (never a fabricated URL). Scope: G7 only.
           NEXT_PUBLIC_STARTER_KIT_PAYMENT_URL: ${{ vars.NEXT_PUBLIC_STARTER_KIT_PAYMENT_URL }}
+          # RI-3B / FOP-1. This line is the fix for FRPE-RR blocker B3: the
+          # variable existed and was documented in .env.example, but was NEVER
+          # PASSED TO THE BUILD — and this is a static export, so NEXT_PUBLIC_*
+          # values are inlined at BUILD time. Setting the repository variable
+          # alone therefore changed nothing; the obvious fix was not a fix.
+          # When unset the observation layer falls back to console.debug, which
+          # is the E1 condition ("appears to observe, retains nothing").
+          # Set to: https://terrapayx.com/o
+          NEXT_PUBLIC_OBSERVATION_ENDPOINT: ${{ vars.NEXT_PUBLIC_OBSERVATION_ENDPOINT }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a  # v4
