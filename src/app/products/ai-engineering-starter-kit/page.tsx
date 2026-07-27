@@ -374,7 +374,7 @@ export default function AiEngineeringStarterKitPage() {
           <p className="text-base leading-relaxed" style={{ color: textMuted }}>
             One payment. Lifetime access to v1.0 of the kit and its templates. Digital delivery
             begins after payment verification — the kit is sent to you by email, and we confirm
-            receipt.
+            you received it.
           </p>
           <PrimaryCta />
           {!ctaConfigured && (
