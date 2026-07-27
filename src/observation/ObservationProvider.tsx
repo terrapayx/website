@@ -22,12 +22,27 @@ import {
   CLICK_SURFACE_EVENTS,
   CLICK_SURFACE_SELECTOR,
   DataAttr,
+  INTERSECT_SURFACE_EVENTS,
+  INTERSECT_SURFACE_SELECTOR,
   VIEW_SURFACE_EVENTS,
   VIEW_SURFACE_SELECTOR,
   type ObservationSurface,
 } from './surfaces';
 
 const LANDED_KEY = 'txp.observation.landed';
+
+/** Fraction of a section that must be visible before it counts as viewed. */
+const SECTION_VISIBLE_RATIO = 0.5;
+
+/**
+ * Build the `resource` for an element bound to a cta/section surface. The
+ * identity is a FIELD VALUE — `engagement.hero.viewed` would begin an unbounded
+ * name set, which the canonical naming standard prohibits.
+ */
+function resourceFor(el: HTMLElement, surface: ObservationSurface) {
+  const id = el.getAttribute(DataAttr.ID) || undefined;
+  return id ? { type: surface, id } : undefined;
+}
 
 interface ObservationApi {
   observe: (eventType: ObservationEventType | string, page?: boolean) => void;
@@ -140,13 +155,56 @@ export function ObservationProvider({ children }: { children: ReactNode }) {
       // to the external checkout, so we never delay or alter the CTA's behavior.
       client.emit(eventType, {
         page: currentPage(),
-        resource: productId ? { type: 'product', id: productId } : undefined,
+        resource: productId
+          ? { type: 'product', id: productId }
+          : resourceFor(el, surface as ObservationSurface),
+        metadata: { ctaLabel: (el.textContent || '').trim().slice(0, 80) || undefined },
       });
     };
 
     document.addEventListener('click', onClick, { capture: true });
     return () => document.removeEventListener('click', onClick, { capture: true });
   }, []);
+
+  // Engagement depth (FOP-3): a marked section entering the viewport.
+  // Emitted at most once per section per route — repeated scrolling past the
+  // same hero is not repeated evidence, and counting it as such would inflate
+  // the very signal this exists to measure.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !INTERSECT_SURFACE_SELECTOR) return;
+    if (typeof IntersectionObserver === 'undefined') return; // never break a page
+
+    const seen = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const el = entry.target as HTMLElement;
+          const surface = el.getAttribute(DataAttr.SURFACE) as ObservationSurface | null;
+          const eventType = surface ? INTERSECT_SURFACE_EVENTS[surface] : undefined;
+          if (!eventType) continue;
+
+          const key = `${pathname}::${el.getAttribute(DataAttr.ID) || 'anon'}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          observer.unobserve(el);
+
+          getClient()?.emit(eventType, {
+            page: currentPage(),
+            resource: resourceFor(el, surface as ObservationSurface),
+            metadata: { visibleRatio: SECTION_VISIBLE_RATIO },
+          });
+        }
+      },
+      { threshold: SECTION_VISIBLE_RATIO },
+    );
+
+    document
+      .querySelectorAll<HTMLElement>(INTERSECT_SURFACE_SELECTOR)
+      .forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [pathname]);
 
   return <ObservationContext.Provider value={api}>{children}</ObservationContext.Provider>;
 }

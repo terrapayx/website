@@ -38,6 +38,15 @@ export const EventType = {
   ENGAGEMENT_PRODUCT_VIEWED: 'engagement.product.viewed',
   /** commerce: checkout was initiated at a Primary Commerce CTA. */
   COMMERCE_CHECKOUT_STARTED: 'commerce.checkout.started',
+  // ── Ratified 2026-07-27 for FRPE-RI-3B (growth-observation §3.1) ────────────
+  // Both names went through the governed lifecycle BEFORE appearing here. The
+  // client validates against the contract prior to emission, so an unratified
+  // name would be dropped by our own validator — the contract-first rule is
+  // self-enforcing rather than advisory.
+  /** engagement: a marked section entered the viewport. Section id is a field value, never a name segment. */
+  ENGAGEMENT_SECTION_VIEWED: 'engagement.section.viewed',
+  /** engagement: a call-to-action was clicked (non-commerce CTAs included). */
+  ENGAGEMENT_CTA_CLICKED: 'engagement.cta.clicked',
 } as const;
 
 export type ObservationEventType = (typeof EventType)[keyof typeof EventType];
