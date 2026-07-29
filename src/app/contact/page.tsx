@@ -99,10 +99,21 @@ export default function ContactPage() {
                 </p>
               </div>
 
+              {/* Observation markers (GIP-1-B): declarative and additive — they bind
+                  this element to the CTA surface so the ObservationProvider emits
+                  engagement.cta.clicked. They do not change the link's behavior.
+
+                  The click is the ONLY fact observable from our side. Whether a
+                  message was actually sent happens in the visitor's mail client,
+                  where we have no visibility — so this is deliberately not named
+                  as a contact or enquiry event. Claiming an outcome we cannot see
+                  is the failure this page was rewritten to remove. */}
               <a
                 href={MAILTO}
                 className="inline-flex self-start items-center px-7 py-3 rounded-lg text-sm font-semibold"
                 style={{ background: accent, color: bg }}
+                data-observe-surface="cta"
+                data-observe-id="contact-compose-email"
               >
                 Compose an email
               </a>
@@ -111,7 +122,13 @@ export default function ContactPage() {
                 <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: textMuted }}>
                   Or write to
                 </span>
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-lg font-semibold" style={{ color: accent }}>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-lg font-semibold"
+                  style={{ color: accent }}
+                  data-observe-surface="cta"
+                  data-observe-id="contact-email-address"
+                >
                   {CONTACT_EMAIL}
                 </a>
               </div>

@@ -60,6 +60,28 @@ export class ObservationClient {
     return getOrCaptureAttribution(this.deps.local, this.deps.location, this.deps.referrer);
   }
 
+  /**
+   * The current visit identity as a single opaque token: `<visitorId>.<sessionId>`.
+   *
+   * Used to carry this visit onto an off-site checkout so the payment session it
+   * creates can be joined back here. The observation boundary otherwise ends at
+   * the CTA click — the payment host is a different origin and carries none of
+   * this instrumentation, so without a carried identity there is no way to tell
+   * which visits became sessions.
+   *
+   * Returns null if storage is unavailable. An absent reference is always
+   * preferable to a broken link: this value decorates a buy button.
+   */
+  identityRef(): string | null {
+    try {
+      const visitorId = getOrCreateVisitorId(this.deps.local);
+      const sessionId = getOrCreateSessionId(this.deps.session, this.deps.now());
+      return visitorId && sessionId ? `${visitorId}.${sessionId}` : null;
+    } catch {
+      return null;
+    }
+  }
+
   /** Build a canonical event from the current identity, attribution, and context. */
   buildEvent(eventType: ObservationEventType | string, ctx: ObserveContext = {}): ObservationEvent {
     const nowMs = this.deps.now();
