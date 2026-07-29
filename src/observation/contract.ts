@@ -47,6 +47,15 @@ export const EventType = {
   ENGAGEMENT_SECTION_VIEWED: 'engagement.section.viewed',
   /** engagement: a call-to-action was clicked (non-commerce CTAs included). */
   ENGAGEMENT_CTA_CLICKED: 'engagement.cta.clicked',
+  // ── Ratified 2026-07-29 (growth-observation §3.1, PR #3) ───────────────────
+  /**
+   * engagement: a page was visible for a measured span, carried as
+   * `metadata.visibleMs`. Without it, `viewed` alone cannot separate "left after
+   * two seconds" from "read it for three minutes and closed the tab" — the first
+   * Observation Window recorded three zero-second visits that were, in fact,
+   * only zero *further interactions*.
+   */
+  ENGAGEMENT_PAGE_DWELLED: 'engagement.page.dwelled',
 } as const;
 
 export type ObservationEventType = (typeof EventType)[keyof typeof EventType];
