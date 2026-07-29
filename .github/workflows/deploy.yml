@@ -28,6 +28,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Gates placed BEFORE the build, so a failure stops the deploy rather than
+      # being reported after the site is already live. This repo deploys on push
+      # to main, which makes these steps the only thing standing between a broken
+      # commit and production.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Observation examples conform to the canonical contract
+        run: npm run verify:observation
+
       - name: Build static site
         run: npm run build
         env:

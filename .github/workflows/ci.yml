@@ -1,0 +1,45 @@
+name: CI
+
+# Runs the same gates as the deploy workflow, but on pull requests — so a
+# problem is caught at Gate 1 (merge) rather than at Gate 2 (deploy).
+#
+# This matters more here than in most repos: `deploy.yml` triggers on push to
+# main, so merging IS deploying. Without this workflow the first time anything
+# is checked would be during the deploy that ships it.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Typecheck, test, contract
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Observation examples conform to the canonical contract
+        run: npm run verify:observation
+
+      # The build is part of the gate because this is a static export: several
+      # classes of error (a bad NEXT_PUBLIC_* reference, an invalid route) only
+      # surface at build time and would otherwise reach main unchallenged.
+      - name: Build static site
+        run: npm run build
