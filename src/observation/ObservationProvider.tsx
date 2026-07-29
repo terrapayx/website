@@ -24,6 +24,7 @@ import {
   DataAttr,
   INTERSECT_SURFACE_EVENTS,
   INTERSECT_SURFACE_SELECTOR,
+  Surface,
   VIEW_SURFACE_EVENTS,
   VIEW_SURFACE_SELECTOR,
   type ObservationSurface,
@@ -165,6 +166,43 @@ export function ObservationProvider({ children }: { children: ReactNode }) {
     document.addEventListener('click', onClick, { capture: true });
     return () => document.removeEventListener('click', onClick, { capture: true });
   }, []);
+
+  // Carry the visit identity onto off-site checkout links.
+  //
+  // The observation boundary ends at the CTA click: the payment host is a
+  // different origin and carries none of this instrumentation. On 2026-07-28 two
+  // checkout CTAs were clicked and only one became a Stripe Session, and the two
+  // records could be matched only by guessing from an 18-second gap — an
+  // inference that stops working the moment there is more than one a day.
+  //
+  // Appending `?ref=<visitorId>.<sessionId>` lets the payment host attach it to
+  // the session as `client_reference_id`, making the join exact.
+  //
+  // Done once after hydration rather than during the click, deliberately: the
+  // click path to a buy button is the last place to add work that could throw.
+  // If this effect never runs, the CTA still navigates exactly as authored — it
+  // simply arrives without a reference.
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+    const ref = getClient()?.identityRef();
+    if (!ref) return;
+
+    const selector = `a[${DataAttr.SURFACE}="${Surface.COMMERCE_CTA}"]`;
+    document.querySelectorAll<HTMLAnchorElement>(selector).forEach((a) => {
+      try {
+        const url = new URL(a.href, window.location.href);
+        // Only off-site payment links. The CTA falls back to an internal route
+        // when no payment URL is configured, and that needs no reference.
+        if (url.origin === window.location.origin) return;
+        if (url.protocol !== 'https:' && url.protocol !== 'http:') return;
+        url.searchParams.set('ref', ref); // set, not append — idempotent per route
+        a.href = url.toString();
+      } catch {
+        // Leave the CTA exactly as authored. Instrumentation must never be the
+        // reason someone cannot buy.
+      }
+    });
+  }, [pathname]);
 
   // Engagement depth (FOP-3): a marked section entering the viewport.
   // Emitted at most once per section per route — repeated scrolling past the
