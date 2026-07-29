@@ -17,6 +17,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode }
 import { usePathname } from 'next/navigation';
 import { ObservationClient } from './client';
 import { createDefaultAdapter } from './adapter';
+import { DwellTracker } from './dwell';
 import { EventType, type ObservationEventType, type ObservationPage } from './contract';
 import {
   CLICK_SURFACE_EVENTS,
@@ -188,33 +189,28 @@ export function ObservationProvider({ children }: { children: ReactNode }) {
     // it would attribute the time to the wrong one.
     const page = currentPage();
 
-    let visibleSince: number | null =
-      document.visibilityState === 'visible' ? Date.now() : null;
-    let accumulated = 0;
+    // The arithmetic lives in DwellTracker, where it is covered by tests. What
+    // remains here is only wiring: which browser events drive it, and what page
+    // context the emitted event carries.
+    const tracker = new DwellTracker({
+      now: () => Date.now(),
+      onDwell: (visibleMs) => {
+        getClient()?.emit(EventType.ENGAGEMENT_PAGE_DWELLED, {
+          page,
+          metadata: { visibleMs },
+        });
+      },
+    });
 
-    const flush = () => {
-      if (visibleSince !== null) {
-        accumulated += Date.now() - visibleSince;
-        visibleSince = null;
-      }
-      const visibleMs = accumulated;
-      accumulated = 0;
-      // A zero-length dwell is not evidence of anything, and emitting it would
-      // add noise to the very row this clarifies. It also makes the
-      // visibilitychange→pagehide pair self-guarding: the second flush has
-      // nothing left to report, so no duplicate is emitted.
-      if (visibleMs <= 0) return;
-      getClient()?.emit(EventType.ENGAGEMENT_PAGE_DWELLED, {
-        page,
-        metadata: { visibleMs },
-      });
-    };
+    if (document.visibilityState === 'visible') tracker.resume();
+
+    const flush = () => tracker.flush();
 
     const onVisibility = () => {
       if (document.visibilityState === 'visible') {
-        if (visibleSince === null) visibleSince = Date.now();
+        tracker.resume();
       } else {
-        flush();
+        tracker.flush();
       }
     };
 
