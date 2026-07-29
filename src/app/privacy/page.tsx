@@ -9,9 +9,14 @@
 // about behaviour, and publishing one we do not honour is the same failure as a
 // form that says "message received" and discards it. Two consequences:
 //
-//   - The retention period below is a PROMISE. The observation table currently
-//     has no TTL configured, so it must be set before this page is published or
-//     this paragraph is false. See docs/ in platform-infra-cdk.
+//   - The retention period below is a PROMISE, and it is now kept. The
+//     observation table has TTL enabled on `expiresAt` with a 780-day window —
+//     deliberately short of the 26 months stated here, because DynamoDB expires
+//     items on a best-effort basis and exact-figure timing would let ordinary
+//     lag make this page false. The 76 records predating that change were
+//     backfilled, so the claim covers the whole table rather than only new data.
+//     See platform-infra-cdk#65. If the retention wording here changes, the TTL
+//     must change with it — the two are one statement in two places.
 //   - Nothing here claims a certification, an audit, or a DPO that we do not
 //     have.
 //
@@ -141,7 +146,21 @@ export default function PrivacyPage(): React.JSX.Element {
         <p>
           Our infrastructure runs on Amazon Web Services in Singapore and the United States. If you
           are in the UK, the EEA, or elsewhere outside those regions, your data is transferred
-          there. Payment data is handled by Stripe under their own transfer safeguards.
+          there.
+        </p>
+        {/* Naming the safeguard is not optional decoration: Singapore has no UK or EU
+            adequacy decision, so GDPR Art. 44-49 requires a transfer mechanism to be
+            identified. Saying only "we transfer it there" leaves the disclosure
+            incomplete.
+            TODO(Founder): confirm the AWS DPA has not been varied on this account.
+            It incorporates the SCCs and UK IDTA by default for all customers, which is
+            what makes the sentence below true — but "by default" is worth verifying
+            once rather than assuming forever. */}
+        <p>
+          These transfers are made under Amazon Web Services&apos; Data Processing Addendum, which
+          incorporates the EU Standard Contractual Clauses and the UK International Data Transfer
+          Addendum. Stripe&apos;s transfers are governed by its own equivalent safeguards. A copy of
+          either is available on request.
         </p>
       </LegalSection>
 
@@ -156,10 +175,20 @@ export default function PrivacyPage(): React.JSX.Element {
         </p>
         <p>
           One practical limit, stated plainly: the browsing identifiers are random and not connected
-          to your name, so if you ask us to delete &ldquo;your&rdquo; browsing data we generally{' '}
-          <strong style={{ color: '#E2EBF8' }}>cannot tell which records are yours</strong>. Clearing
-          your browser storage for this site is the reliable way to sever the link. We would rather
-          say this than imply a capability we do not have.
+          to your name, so if you ask us to delete &ldquo;your&rdquo; browsing data{' '}
+          <strong style={{ color: '#E2EBF8' }}>
+            we generally cannot tell which records are yours
+          </strong>{' '}
+          from your name or email address alone. We would rather say this than imply a capability we
+          do not have.
+        </p>
+        <p>
+          There is one route that does work. The identifiers are stored in your own browser, under{' '}
+          <code>txp.observation.visitorId</code> in <code>localStorage</code>. If you send us that
+          value, we can find those records and delete them. Clearing your browser storage for this
+          site also severs the link, though it does not remove what was already collected — so if
+          you want the existing records gone, send us the value{' '}
+          <strong style={{ color: '#E2EBF8' }}>before</strong> clearing.
         </p>
         <p>
           If you are in the UK or EEA and think we have handled your data badly, you may complain to

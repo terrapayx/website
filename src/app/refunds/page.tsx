@@ -21,7 +21,7 @@ import LegalPage, { LegalNote, LegalSection } from '../../components/LegalPage';
 export const metadata: Metadata = {
   title: 'Refund Policy — Terra Pay X',
   description:
-    'Thirty days, no questions asked. How to request a refund from Terra Pay X and how long it takes.',
+    'Thirty days, no questions asked, subject to our abuse policy. How to request a refund from Terra Pay X.',
 };
 
 const accent = '#38BDF8';
@@ -32,7 +32,7 @@ export default function RefundsPage(): React.JSX.Element {
     <LegalPage
       title="Refund Policy"
       updated="30 July 2026"
-      intro="Thirty days, no questions asked. If the kit is not what you needed, email us and we refund you."
+      intro="Thirty days, no questions asked, for anyone acting in good faith. If the kit is not what you needed, email us and we refund you."
     >
       <LegalSection heading="The policy">
         <p>
@@ -46,6 +46,11 @@ export default function RefundsPage(): React.JSX.Element {
         <p>
           You do not need to explain why. You do not need to prove you did not use it. We will not
           ask you to justify it.
+        </p>
+        <p>
+          The one exception is the abuse case set out at the bottom of this page. We would rather
+          state it here, next to the promise, than let you find it after you have relied on the
+          promise.
         </p>
         <LegalNote>
           We know a digital product cannot be handed back, and we are not pretending otherwise. The
