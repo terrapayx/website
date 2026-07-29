@@ -31,6 +31,18 @@ const footerSections = [
       { label: 'labs@terrapayx.com', href: 'mailto:labs@terrapayx.com' },
     ],
   },
+  {
+    // A site that takes money needs these findable, not buried. Stripe's merchant
+    // agreement expects published terms and a refund policy, and a buyer entering
+    // an email address at checkout is entitled to find the privacy notice without
+    // hunting for it.
+    title: 'Legal',
+    links: [
+      { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
+      { label: 'Refund Policy', href: '/refunds' },
+    ],
+  },
 ];
 
 export default function Footer() {
