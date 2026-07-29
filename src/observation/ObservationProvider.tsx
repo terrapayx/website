@@ -167,6 +167,71 @@ export function ObservationProvider({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('click', onClick, { capture: true });
   }, []);
 
+  // Dwell (engagement.page.dwelled) — makes a short visit interpretable.
+  //
+  // The first Observation Window recorded three external visits at "zero-second
+  // dwell". None of them means someone left immediately; it means no SECOND
+  // interaction was recorded. With `viewed` as the only page-level event, a
+  // two-second bounce and a three-minute read that ends in a closed tab are the
+  // same observation — so the one question the window existed to answer, whether
+  // the page failed to hold people or held them and gave them nothing to act on,
+  // could not be asked of the data.
+  //
+  // Measures VISIBLE time, not wall-clock: a tab left open in the background is
+  // not attention, and counting it as such would corrupt the row this exists to
+  // clarify.
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+
+    // Captured HERE, at the start of the route visit. By the time a route change
+    // flushes the dwell, window.location already describes the NEXT page — using
+    // it would attribute the time to the wrong one.
+    const page = currentPage();
+
+    let visibleSince: number | null =
+      document.visibilityState === 'visible' ? Date.now() : null;
+    let accumulated = 0;
+
+    const flush = () => {
+      if (visibleSince !== null) {
+        accumulated += Date.now() - visibleSince;
+        visibleSince = null;
+      }
+      const visibleMs = accumulated;
+      accumulated = 0;
+      // A zero-length dwell is not evidence of anything, and emitting it would
+      // add noise to the very row this clarifies. It also makes the
+      // visibilitychange→pagehide pair self-guarding: the second flush has
+      // nothing left to report, so no duplicate is emitted.
+      if (visibleMs <= 0) return;
+      getClient()?.emit(EventType.ENGAGEMENT_PAGE_DWELLED, {
+        page,
+        metadata: { visibleMs },
+      });
+    };
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        if (visibleSince === null) visibleSince = Date.now();
+      } else {
+        flush();
+      }
+    };
+
+    document.addEventListener('visibilitychange', onVisibility);
+    // pagehide, not beforeunload/unload: it is the one that still fires when a
+    // mobile browser discards the tab, which is precisely the departure we have
+    // been unable to see. The beacon adapter survives it.
+    window.addEventListener('pagehide', flush);
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', flush);
+      // Route change: attribute the elapsed time to the page being LEFT.
+      flush();
+    };
+  }, [pathname]);
+
   // Carry the visit identity onto off-site checkout links.
   //
   // The observation boundary ends at the CTA click: the payment host is a
