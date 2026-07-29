@@ -48,10 +48,21 @@ export default function PrivacyPage(): React.JSX.Element {
           </a>
           .
         </p>
-        {/* TODO(Founder): registered address and state of incorporation. A privacy
-            notice without a postal address is incomplete under GDPR Art. 13. */}
+        {/* Registered office from the Delaware Certificate of Incorporation, filed
+            22 June 2026, file number 10670163. This is the company's address of
+            record via its registered agent (Legalinc Corporate Services Inc.),
+            which is the correct address to publish for a Delaware corporation
+            with no separate business premises.
+            The Sole Incorporator address on the certificate is a private
+            residence and is deliberately NOT published here. */}
         <p>
-          <em>Registered address: to be completed.</em>
+          Terra Pay X, Inc.
+          <br />
+          131 Continental Dr, Suite 305
+          <br />
+          Newark, DE 19713
+          <br />
+          United States
         </p>
       </LegalSection>
 

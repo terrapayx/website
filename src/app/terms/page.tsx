@@ -42,9 +42,18 @@ export default function TermsPage(): React.JSX.Element {
           </a>
           .
         </p>
-        {/* TODO(Founder): registered address and state of incorporation. */}
+        {/* Delaware Certificate of Incorporation, filed 22 June 2026, file number
+            10670163. Registered office is the registered agent's address
+            (Legalinc Corporate Services Inc.); the Sole Incorporator address on
+            the certificate is a private residence and is not published. */}
         <p>
-          <em>Registered address: to be completed.</em>
+          Terra Pay X, Inc., a Delaware corporation (file number 10670163).
+          <br />
+          131 Continental Dr, Suite 305
+          <br />
+          Newark, DE 19713
+          <br />
+          United States
         </p>
       </LegalSection>
 
@@ -66,10 +75,23 @@ export default function TermsPage(): React.JSX.Element {
       </LegalSection>
 
       <LegalSection heading="Payment">
+        {/* The previous wording said tax "may apply where you are; you are
+            responsible for that". A legal review flagged that as likely
+            unenforceable: for B2C sales of digital content into the EU and UK the
+            obligation sits with the seller from the first sale, with no
+            registration threshold, and cannot be shifted to the consumer by
+            contract.
+            It has been narrowed rather than replaced. The obvious replacement —
+            "tax is calculated and added at checkout" — would be worse, because
+            checkout.service.ts sets no `automatic_tax` and nothing is collected in
+            any jurisdiction today. Stating something incomplete is a better
+            failure than stating something false.
+            BLOCKING for EU/UK sales, not for publishing this page: the tax
+            position needs an indirect-tax specialist, and this paragraph should be
+            rewritten to describe whatever is actually implemented. */}
         <p>
-          Payments are processed by Stripe. Prices are in US dollars and exclude any tax that may
-          apply where you are; you are responsible for that. Your order is accepted when payment is
-          confirmed.
+          Payments are processed by Stripe. Prices are shown in US dollars and are exclusive of any
+          applicable tax. Your order is accepted when payment is confirmed.
         </p>
       </LegalSection>
 
@@ -159,16 +181,19 @@ export default function TermsPage(): React.JSX.Element {
       </LegalSection>
 
       <LegalSection heading="Governing law">
-        {/* TODO(Founder): state of incorporation determines this. Do not guess — the
-            wrong jurisdiction is worse than an obvious blank. */}
         <p>
-          <em>
-            Governing law and venue: to be completed, following the state of incorporation.
-          </em>
+          These terms are governed by the laws of the State of Delaware, United States, without
+          regard to its conflict-of-law rules. Disputes arising from them are subject to the
+          jurisdiction of the state and federal courts located in Delaware.
         </p>
+        {/* Retained deliberately. Rome I Art. 6 (and the equivalent UK rule) means a
+            choice of Delaware law cannot strip a consumer of the mandatory
+            protections of their own country, and a clause implying otherwise would
+            be both unenforceable and misleading. Reviewed and kept as-is. */}
         <p>
-          If you are a consumer, this does not deprive you of the protection of mandatory laws in
-          your country of residence.
+          If you are a consumer, none of this deprives you of the protection of mandatory laws in
+          your country of residence, or of your right to bring proceedings there where local law
+          gives you that right.
         </p>
       </LegalSection>
 
