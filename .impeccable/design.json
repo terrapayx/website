@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-16T10:45:11Z",
+  "title": "Design System: Terra Pay X",
+  "incumbent": {
+    "isIncumbentBaseline": true,
+    "redesignDirection": false,
+    "aspirational": false,
+    "role": "anti-reference",
+    "sourceRepo": "terrapayx/website",
+    "sourceRef": "main",
+    "sourceSha": "12a2254",
+    "extractedAt": "2026-08-16T10:45:11Z",
+    "extractedBy": "/impeccable document (scan mode, Impeccable 4.0.4)",
+    "extractionIntent": "Record the SHIPPED visual system as a pre-redesign baseline so the redesign can treat it as evidence and anti-reference. Descriptive only. Nothing in this file is a target, a recommendation, or a direction to build toward.",
+    "confirmedAntiReference": "The incumbent world reads as generic technical SaaS — dark navy plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. Recorded 2026-08-16 per the redesign audit.",
+    "corroboration": {
+      "source": "Impeccable mechanical design detector, run over src/app/globals.css 2026-08-16",
+      "findings": ["overused-font (Inter, globals.css:5 and :24)", "codex-grid-background (.dot-grid, globals.css:49)"],
+      "establishes": "Two independent methods applied to THIS codebase reached the same reading of it: the surface presents as generic rather than particular.",
+      "doesNotEstablish": "That Inter is a poor typeface, that dot-grid fields are bad generally, or that either must be removed. Both are defensible in a system that has a reason for them. Whether either survives is a decision for the redesign brief, resolved in `shape` against confirmed product truth — not settled by this baseline.",
+      "disposition": "Left unfixed and unsuppressed. No ignore rule added. Fixing would be a source change in a documentation-only capture; suppressing would delete evidence a later verification pass should be able to re-derive."
+    },
+    "pendingDeltas": [
+      {
+        "pr": 17,
+        "repo": "terrapayx/website",
+        "branch": "redesign/terrapayx-p0-commercial-clarity",
+        "state": "draft, unmerged",
+        "incorporated": false,
+        "summary": "Raises the secondary text token from #64748B to #94A3B8 site-wide for WCAG AA, reframes the homepage hero and root metadata around Labs, reduces the hero to two CTAs, and retires the hero-explore-work observation surface.",
+        "note": "Deliberately NOT treated as incumbent. This file describes main only."
+      }
+    ],
+    "regeneration": {
+      "instruction": "Re-run `/impeccable document` from the repository root after PR #17 merges, then replace both DESIGN.md and this sidecar. Do not hand-patch either file to track a branch — the baseline must always describe a merged state.",
+      "command": "/impeccable document",
+      "regenerateWhen": "PR #17 merges, or any change to tailwind.config.ts, src/app/globals.css, or the component tree."
+    },
+    "knownDefectsReproducedFaithfully": [
+      "Component specimens use #64748B for secondary text because that is what main ships, despite it failing WCAG AA at normal size.",
+      "No specimen defines a :focus-visible style, because the incumbent system defines none anywhere.",
+      "No specimen defines a prefers-reduced-motion override, because the incumbent system defines none.",
+      "Hover behaviour is reproduced as shipped: page-level CTAs have NO hover treatment; only the navigation CTA and navigation links change on hover, and they do so via inline JS event handlers rather than CSS pseudo-classes.",
+      "The availability badge dot uses animate-pulse with no reduced-motion guard."
+    ]
+  },
+  "extensions": {
+    "colorMeta": {
+      "_note": "canonical values are computed from the project's source hex. tonalRamp arrays are DERIVED for visualization only — they are synthesized in OKLCH and are NOT implemented tokens. The project defines no tonal scale.",
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "implemented": true,
+        "canonical": "oklch(13.6% 0.036 259.2)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.036 259.2)", "oklch(26% 0.036 259.2)", "oklch(38% 0.036 259.2)", "oklch(49% 0.036 259.2)", "oklch(61% 0.036 259.2)", "oklch(72% 0.036 259.2)", "oklch(84% 0.036 259.2)", "oklch(95% 0.036 259.2)"]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel",
+        "implemented": true,
+        "canonical": "oklch(19.5% 0.038 266.8)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.038 266.8)", "oklch(26% 0.038 266.8)", "oklch(38% 0.038 266.8)", "oklch(49% 0.038 266.8)", "oklch(61% 0.038 266.8)", "oklch(72% 0.038 266.8)", "oklch(84% 0.038 266.8)", "oklch(95% 0.038 266.8)"]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "implemented": true,
+        "note": "Used both as component outline and as section/nav/footer divider.",
+        "canonical": "oklch(30.0% 0.056 258.9)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.056 258.9)", "oklch(26% 0.056 258.9)", "oklch(38% 0.056 258.9)", "oklch(49% 0.056 258.9)", "oklch(61% 0.056 258.9)", "oklch(72% 0.056 258.9)", "oklch(84% 0.056 258.9)", "oklch(95% 0.056 258.9)"]
+      },
+      "read": {
+        "role": "neutral",
+        "displayName": "Read",
+        "implemented": true,
+        "canonical": "oklch(93.7% 0.020 257.5)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.020 257.5)", "oklch(26% 0.020 257.5)", "oklch(38% 0.020 257.5)", "oklch(49% 0.020 257.5)", "oklch(61% 0.020 257.5)", "oklch(72% 0.020 257.5)", "oklch(84% 0.020 257.5)", "oklch(95% 0.020 257.5)"]
+      },
+      "aside": {
+        "role": "neutral",
+        "displayName": "Aside",
+        "implemented": true,
+        "note": "THE incumbent secondary text color, used site-wide on main. 4.20:1 on Ground, 3.85:1 on Panel — below WCAG AA for normal text. Recorded defect.",
+        "canonical": "oklch(55.4% 0.041 257.4)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.041 257.4)", "oklch(26% 0.041 257.4)", "oklch(38% 0.041 257.4)", "oklch(49% 0.041 257.4)", "oklch(61% 0.041 257.4)", "oklch(72% 0.041 257.4)", "oklch(84% 0.041 257.4)", "oklch(95% 0.041 257.4)"]
+      },
+      "aside-legible": {
+        "role": "neutral",
+        "displayName": "Aside Legible",
+        "implemented": true,
+        "note": "Present on main in only three places. 7.80:1 on Ground, 7.15:1 on Panel — passes WCAG AA. Adopting it site-wide is REMEDIATION (draft PR #17), not incumbent behaviour.",
+        "canonical": "oklch(71.1% 0.035 256.8)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.035 256.8)", "oklch(26% 0.035 256.8)", "oklch(38% 0.035 256.8)", "oklch(49% 0.035 256.8)", "oklch(61% 0.035 256.8)", "oklch(72% 0.035 256.8)", "oklch(84% 0.035 256.8)", "oklch(95% 0.035 256.8)"]
+      },
+      "signal-cyan": {
+        "role": "primary",
+        "displayName": "Signal Cyan",
+        "implemented": true,
+        "canonical": "oklch(75.4% 0.139 232.7)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.139 232.7)", "oklch(26% 0.139 232.7)", "oklch(38% 0.139 232.7)", "oklch(49% 0.139 232.7)", "oklch(61% 0.139 232.7)", "oklch(72% 0.139 232.7)", "oklch(84% 0.139 232.7)", "oklch(95% 0.139 232.7)"]
+      },
+      "signal-cyan-light": {
+        "role": "primary",
+        "displayName": "Signal Cyan Light",
+        "implemented": true,
+        "note": "Hover state for the navigation CTA only, applied by an inline JS handler. Page-level CTAs have no hover treatment.",
+        "canonical": "oklch(82.8% 0.101 230.3)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.101 230.3)", "oklch(26% 0.101 230.3)", "oklch(38% 0.101 230.3)", "oklch(49% 0.101 230.3)", "oklch(61% 0.101 230.3)", "oklch(72% 0.101 230.3)", "oklch(84% 0.101 230.3)", "oklch(95% 0.101 230.3)"]
+      },
+      "confirmation-teal": {
+        "role": "secondary",
+        "displayName": "Confirmation Teal",
+        "implemented": true,
+        "note": "Three unrelated roles on main: resolved state (availability badge + pulsing dot, checkmark icons), division/category marking (divisionColor on Labs entries), and ACTION (the hero 'Get the Starter Kit' CTA, page.tsx:79). Not a state-only color.",
+        "canonical": "oklch(78.5% 0.133 181.9)",
+        "tonalRampDerived": true,
+        "tonalRamp": ["oklch(15% 0.133 181.9)", "oklch(26% 0.133 181.9)", "oklch(38% 0.133 181.9)", "oklch(49% 0.133 181.9)", "oklch(61% 0.133 181.9)", "oklch(72% 0.133 181.9)", "oklch(84% 0.133 181.9)", "oklch(95% 0.133 181.9)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page hero headline. One per page, in the first viewport." },
+      "headline": { "displayName": "Headline", "purpose": "Section openers." },
+      "title": { "displayName": "Title", "purpose": "Card and panel headings (24px / 700 on the homepage feature cards)." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy, held to a 672px measure (~70ch)." },
+      "label": { "displayName": "Label", "purpose": "Section eyebrows and hero badges: uppercase, weight 500-600, tracked 0.1em-0.15em. NOT universal to 12px — 45 of 91 text-xs uses on main are sentence case." }
+    },
+    "shadows": [
+      {
+        "name": "interaction-glow",
+        "value": "0 0 30px rgba(56,189,248,0.12), 0 0 0 1px rgba(56,189,248,0.2)",
+        "implemented": true,
+        "purpose": "The only box-shadow in the system. Applied on card hover with translateY(-2px) over 0.3s ease. Never present at rest."
+      },
+      {
+        "name": "hero-ambient-glow",
+        "value": "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(56,189,248,0.08) 0%, transparent 70%)",
+        "implemented": true,
+        "purpose": "Not a shadow but a permanent ambient light on the hero of / and /labs. Rendered at rest, never triggered. Distinct from the reactive interaction glow."
+      }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "200ms", "implemented": true, "purpose": "transition-all duration-200 on CTAs. Note: page-level CTAs declare the transition but define no hover state to transition to." },
+      { "name": "shell-slow", "value": "300ms", "implemented": true, "purpose": "Navigation shell transition from transparent to blurred." },
+      { "name": "card-hover", "value": "0.3s ease", "implemented": true, "purpose": "Card glow and lift." },
+      { "name": "animate-pulse", "value": "Tailwind default pulse", "implemented": true, "purpose": "The availability badge dot. No prefers-reduced-motion guard — recorded defect." }
+    ],
+    "breakpoints": {
+      "_note": "The project defines NO custom breakpoints; these are stock Tailwind values. The list below is the set OBSERVED IN SOURCE, not Tailwind's complete scale — xl (1280px) and 2xl (1536px) exist in the framework but are unused on main.",
+      "source": "Tailwind defaults (unmodified)",
+      "observedInSource": [
+        { "name": "sm", "value": "640px", "uses": 50 },
+        { "name": "md", "value": "768px", "uses": 16 },
+        { "name": "lg", "value": "1024px", "uses": 19 }
+      ],
+      "definedButUnused": ["xl", "2xl"]
+    },
+    "observedOneOffs": [
+      {
+        "name": "scrollbar-thumb-radius",
+        "value": "3px",
+        "property": "border-radius",
+        "location": "src/app/globals.css:40 (::-webkit-scrollbar-thumb)",
+        "occurrences": 1,
+        "isToken": false,
+        "reusable": false,
+        "excludedFromFrontmatter": true,
+        "detail": "The only border-radius in the source outside the Tailwind scale, and the only radius belonging to no component family. Recorded so the incumbent record is complete.",
+        "doNotUse": "Deliberately excluded from the DESIGN.md `rounded` map. Presence in that map is what grants a value token status, so absence is the only reliable way to withhold it. Do not emit 3px for any component; the reusable radius scale is action 8px, panel 12px, feature 16px, pill 9999px.",
+        "surfacedBy": "Impeccable design detector (design-system-radius), 2026-08-16"
+      }
+    ],
+    "containers": [
+      { "name": "page", "value": "1152px", "purpose": "max-w-6xl — the column every page is held to." },
+      { "name": "measure", "value": "672px", "purpose": "max-w-2xl — body copy measure, ~70ch." },
+      { "name": "feature", "value": "896px", "purpose": "max-w-4xl — feature grids and hero content." }
+    ],
+    "recordedDefects": [
+      { "name": "no-focus-visible", "detail": "No :focus-visible treatment exists anywhere in src/. Keyboard focus is effectively invisible.", "remediation": "Any redesign must add one. Not addressed by PR #17." },
+      { "name": "no-reduced-motion", "detail": "No prefers-reduced-motion override exists, including for the animate-pulse availability dot.", "remediation": "Not addressed by PR #17." },
+      { "name": "duplicate-webfont", "detail": "Inter is loaded twice: next/font in layout.tsx plus a render-blocking Google Fonts @import in globals.css.", "remediation": "Remove the @import. Not addressed by PR #17." },
+      { "name": "contrast-debt", "detail": "#64748B carries most secondary copy at 4.20:1 / 3.85:1, below WCAG AA.", "remediation": "PR #17 raises it to #94A3B8 site-wide." },
+      { "name": "js-hover", "detail": "Navigation link and nav CTA hover states are applied by inline onMouseEnter/onMouseLeave handlers rather than CSS pseudo-classes.", "remediation": "Not addressed by PR #17." },
+      { "name": "teal-semantic-ambiguity", "detail": "Confirmation Teal means resolved state, Labs division, and 'click to buy' simultaneously, so it teaches the visitor nothing.", "remediation": "Pick one meaning per accent. Not addressed by PR #17." },
+      { "name": "inert-cta-hover", "detail": "Page-level CTAs declare transition-all duration-200 but define no hover state, so they are visually inert under the cursor.", "remediation": "Not addressed by PR #17." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (page)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "fidelity": "faithful",
+      "description": "The filled action used on page bodies. Reproduced as shipped: it declares a 200ms transition but defines NO hover and NO focus style. That is the incumbent behaviour, not an omission in this specimen.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Request a Strategy Session</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; background: #38BDF8; color: #020817; padding: 12px 28px; border-radius: 8px; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 200ms; }"
+    },
+    {
+      "name": "Navigation CTA",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "fidelity": "faithful",
+      "description": "The compact nav variant — the only button in the system with a hover state. In source that hover is applied by inline JS handlers; expressed here as :hover so the specimen renders live. No focus style exists in source.",
+      "html": "<a class=\"ds-btn-nav\" href=\"#\">Request a Strategy Session</a>",
+      "css": ".ds-btn-nav { display: inline-flex; align-items: center; background: #38BDF8; color: #020817; padding: 8px 16px; border-radius: 8px; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: all 200ms; } .ds-btn-nav:hover { background: #7DD3FC; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "fidelity": "faithful",
+      "description": "Secondary action. Identical geometry to the primary so the two align in a row. No hover and no focus style in source.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Explore Our Work</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; background: transparent; color: #E2EBF8; padding: 12px 28px; border: 1px solid #1C2E4A; border-radius: 8px; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 200ms; }"
+    },
+    {
+      "name": "Teal Outline CTA (color-doctrine counterexample)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "fidelity": "faithful",
+      "description": "The hero 'Get the Starter Kit' action (page.tsx:79) — transparent fill, 1px Confirmation Teal border, teal text, same 12px 28px / 8px geometry as the other CTAs. Included deliberately as a counterexample: it is the system's only teal action and the reason Confirmation Teal cannot be described as non-interactive, and Signal Cyan cannot be described as the only actionable color. No hover, no focus, as shipped.",
+      "html": "<a class=\"ds-btn-teal\" href=\"#\">Get the Starter Kit</a>",
+      "css": ".ds-btn-teal { display: inline-flex; align-items: center; background: transparent; color: #2DD4BF; padding: 12px 28px; border: 1px solid #2DD4BF; border-radius: 8px; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 200ms; }"
+    },
+    {
+      "name": "Signal Badge",
+      "kind": "chip",
+      "refersTo": "badge-signal",
+      "fidelity": "faithful",
+      "description": "Hero eyebrow. Full-round, wide-tracked uppercase micro-label.",
+      "html": "<span class=\"ds-badge-signal\">Cloud-Native · AI-Governed · Production-Ready</span>",
+      "css": ".ds-badge-signal { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; border: 1px solid rgba(56,189,248,0.4); background: rgba(56,189,248,0.06); color: #38BDF8; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Confirmation Badge",
+      "kind": "chip",
+      "refersTo": "badge-confirmation",
+      "fidelity": "faithful",
+      "description": "Resolved-state marker. Sentence case at 12px, not uppercase. The dot pulses continuously with no reduced-motion guard — reproduced as shipped, and recorded as a defect.",
+      "html": "<span class=\"ds-badge-confirm\"><span class=\"ds-badge-confirm__dot\"></span>Available today</span>",
+      "css": ".ds-badge-confirm { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; border: 1px solid rgba(45,212,191,0.3); background: rgba(45,212,191,0.08); color: #2DD4BF; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 500; } .ds-badge-confirm__dot { width: 6px; height: 6px; border-radius: 50%; background: #2DD4BF; animation: ds-pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; } @keyframes ds-pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }"
+    },
+    {
+      "name": "Feature Card",
+      "kind": "card",
+      "refersTo": "card-panel",
+      "fidelity": "faithful",
+      "description": "Ground-filled card on a Panel section — the majority pattern (8 of 12 card surfaces; the other 4 are Panel-filled). Glow and lift appear only on hover. Body copy uses the incumbent #64748B, which fails WCAG AA.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card__title\">Platform</h3><p class=\"ds-card__body\">Secure, observable, and operationally resilient payments infrastructure.</p></div>",
+      "css": ".ds-card { background: #020817; border: 1px solid #1C2E4A; border-radius: 16px; padding: 32px; transition: box-shadow 0.3s ease, transform 0.3s ease; } .ds-card:hover { box-shadow: 0 0 30px rgba(56,189,248,0.12), 0 0 0 1px rgba(56,189,248,0.2); transform: translateY(-2px); } .ds-card__title { margin: 0 0 12px; font-family: Inter, system-ui, sans-serif; font-size: 24px; font-weight: 700; color: #E2EBF8; } .ds-card__body { margin: 0; font-family: Inter, system-ui, sans-serif; font-size: 14px; line-height: 1.625; color: #64748B; }"
+    },
+    {
+      "name": "Promoted Feature Card",
+      "kind": "card",
+      "refersTo": "card-panel",
+      "fidelity": "faithful",
+      "description": "The system's only structural emphasis device — the hairline border swapped for Signal Cyan on the Labs card, marking the live commercial path while its sibling keeps hairline. Otherwise identical to the Feature Card.",
+      "html": "<div class=\"ds-card-promoted\"><h3 class=\"ds-card-promoted__title\">Labs</h3><p class=\"ds-card-promoted__body\">The advisory and innovation division of Terra Pay X.</p></div>",
+      "css": ".ds-card-promoted { background: #020817; border: 1px solid #38BDF8; border-radius: 16px; padding: 32px; transition: box-shadow 0.3s ease, transform 0.3s ease; } .ds-card-promoted:hover { box-shadow: 0 0 30px rgba(56,189,248,0.12), 0 0 0 1px rgba(56,189,248,0.2); transform: translateY(-2px); } .ds-card-promoted__title { margin: 0 0 12px; font-family: Inter, system-ui, sans-serif; font-size: 24px; font-weight: 700; color: #E2EBF8; } .ds-card-promoted__body { margin: 0; font-family: Inter, system-ui, sans-serif; font-size: 14px; line-height: 1.625; color: #64748B; }"
+    },
+    {
+      "name": "Navigation (scrolled)",
+      "kind": "nav",
+      "refersTo": "nav-shell",
+      "fidelity": "faithful",
+      "description": "Fixed 64px shell in its scrolled state. The wordmark is two spans: 'Terra Pay' in Read and a Signal Cyan 'X', separated by a 4px gap — the only place the brand itself carries the accent. Inactive links use the incumbent #64748B; active is #E2EBF8. In source, hover is applied by inline JS handlers; expressed here as :hover so the specimen renders live. No focus style exists in source. Note the wordmark and links are clickable while carrying no radius, background or border.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav__brand\" href=\"#\">Terra Pay<span class=\"ds-nav__brand-x\">X</span></a><span class=\"ds-nav__links\"><a class=\"ds-nav__link ds-nav__link--active\" href=\"#\">Platform</a><a class=\"ds-nav__link\" href=\"#\">Labs</a><a class=\"ds-nav__link\" href=\"#\">About</a></span></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 32px; height: 64px; padding: 0 24px; background: rgba(2,8,23,0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #1C2E4A; } .ds-nav__brand { display: inline-flex; align-items: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.025em; color: #E2EBF8; text-decoration: none; } .ds-nav__brand-x { color: #38BDF8; } .ds-nav__links { display: flex; gap: 24px; } .ds-nav__link { font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #64748B; text-decoration: none; transition: color 200ms; } .ds-nav__link:hover, .ds-nav__link--active { color: #E2EBF8; }"
+    },
+    {
+      "name": "Dot-Grid Hero Field",
+      "kind": "custom",
+      "refersTo": null,
+      "fidelity": "faithful",
+      "description": "The system's only texture: 1px hairline dots on a 32px pitch at 40% opacity, under a PERMANENT ambient cyan glow anchored to the top edge. The glow is rendered at rest, not on interaction.",
+      "html": "<div class=\"ds-hero\"><div class=\"ds-hero__grid\"></div><div class=\"ds-hero__glow\"></div><span class=\"ds-hero__label\">Cloud-Native · AI-Governed</span></div>",
+      "css": ".ds-hero { position: relative; overflow: hidden; min-height: 200px; display: flex; align-items: center; justify-content: center; background: #020817; } .ds-hero__grid { position: absolute; inset: 0; opacity: 0.4; background-image: radial-gradient(circle, #1C2E4A 1px, transparent 1px); background-size: 32px 32px; } .ds-hero__glow { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(56,189,248,0.08) 0%, transparent 70%); } .ds-hero__label { position: relative; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #38BDF8; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "INCUMBENT METAPHOR (descriptive, non-aspirational): \"The Control Room\"",
+    "incumbentMetaphor": "The Control Room",
+    "isDesignDirection": false,
+    "metaphorNote": "A reading of what shipped, not a direction to build toward. The redesign is not required to honor it and should not treat it as a brief.",
+    "overview": "Terra Pay X renders itself as instrumentation. The ground (#020817) is an unlit room; panels (#0D1426) are the surfaces that catch light; a dot-grid substrate sits beneath the hero at 40% opacity as the faint graph paper such rooms are built on. Against that near-monochrome darkness Signal Cyan is the visually dominant accent and often reads as the live channel, but the incumbent mapping is inconsistent: cyan also decorates, while teal also acts. Depth arrives largely as a response to attention: no surface carries a resting box-shadow, though the hero carries a permanent ambient glow.\n\nThe density is generous rather than packed: an 1152px reading column, 80-96px between sections, 32px inside feature panels. Type does almost all of the structural work, since the palette refuses to. Hierarchy is carried by weight and scale in a single family, with a wide-tracked uppercase micro-label doing the job that a second typeface would do in a warmer system.\n\nThe character this produces is precise, quiet, and slightly clinical — a system that would rather be trusted than liked. That is also its limitation, and it is recorded here deliberately.",
+    "antiReference": "The incumbent world reads as generic technical SaaS — dark navy plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. Recorded 2026-08-16 per the redesign audit.",
+    "keyCharacteristics": [
+      "Near-black navy ground with a single raised panel tone; no third surface level",
+      "Two accents and nothing else chromatic — but neither maps cleanly to interactivity: cyan is also decorative, and teal is simultaneously a state, a category marker, and a purchase action",
+      "No resting box-shadow anywhere; interactive surfaces gain glow and lift only on hover. The hero is the exception — it carries a permanent ambient glow",
+      "Hairline 1px borders used both as component outlines and as section/nav/footer dividers",
+      "One typeface carrying five roles through weight and scale alone",
+      "Wide-tracked uppercase micro-labels on eyebrows, though not on all small text"
+    ],
+    "rules": [
+      { "name": "The One Live Color Pattern", "body": "Signal Cyan is the accent most often found on something actionable, and the palette is otherwise near-monochrome, so cyan does read as the page's live channel. It is NOT a reliable signal of interactivity in either direction. Cyan without interaction: capability-list icon strokes, the hero's permanent ambient glow, the card hover glow, the scrollbar thumb, and the oversized principle numerals at rgba(56,189,248,0.18). Interaction without cyan: the hero 'Get the Starter Kit' CTA is Confirmation Teal, ghost buttons are hairline-bordered with Read text, navigation links are Aside or Read.", "section": "colors", "strength": "tendency" },
+      { "name": "The Teal Ambiguity Defect", "body": "Confirmation Teal carries three unrelated roles on main: resolved state (the 'Available today' badge and its pulsing dot, checkmark icons), division/category marking (divisionColor on Labs-owned entries), and action (the hero 'Get the Starter Kit' CTA, page.tsx:79). A visitor cannot learn what teal means because it does not mean one thing. Recorded as an incumbent defect, not a scheme.", "section": "colors", "strength": "defect" },
+      { "name": "The Inverted Card Pattern", "body": "Panels are lighter than the page, and cards placed on panels are usually filled with Ground — darker than their container. This is the majority pattern, not a rule: of the card surfaces on main, 8 use Ground and 4 use Panel.", "section": "colors", "strength": "tendency" },
+      { "name": "The Contrast Debt Rule", "body": "aside (#64748B) measures 4.20:1 on Ground and 3.85:1 on Panel — below WCAG AA (4.5:1) for normal text, and it carries most secondary copy. aside-legible (#94A3B8) measures 7.80:1 and 7.15:1 but appears in only three places on main. A recorded defect of the incumbent system.", "section": "colors", "strength": "defect" },
+      { "name": "The Weight-Not-Family Rule", "body": "Hierarchy comes from weight (400/500/600/700) and scale. The system uses exactly one family — though it loads that one family through two paths: next/font in layout.tsx and a Google Fonts @import in globals.css.", "section": "typography", "strength": "invariant" },
+      { "name": "The Eyebrow Label Pattern", "body": "Section eyebrows and hero badges at 12px are uppercase, weight 500-600, tracked 0.1em-0.15em. This is NOT universal to 12px: of 91 text-xs uses on main, 45 are not uppercase.", "section": "typography", "strength": "tendency" },
+      { "name": "The No Reactive Glow At Rest Rule", "body": "Interactive surfaces do not glow until touched — a card, badge, or button emitting light at rest is broken. This does not extend to the page: the hero's ambient glow is permanent and is part of the incumbent atmosphere, not a state.", "section": "elevation", "strength": "invariant" }
+    ],
+    "dos": [
+      "Do keep the palette near-monochrome, with accent coverage low — roughly 10% of any viewport. Note the incumbent system does NOT restrict Signal Cyan to actionable elements; see The One Live Color Pattern for counted exceptions.",
+      "Do carry hierarchy with weight and scale in Inter rather than reaching for a second family.",
+      "Do set section eyebrows as uppercase, weight 500-600, tracked 0.1em-0.15em — but do not extend that to all 12px text; badges and fine print are sentence case.",
+      "Do hold body copy to a max-w-2xl (672px) measure regardless of container width.",
+      "Do expect a card on a Panel section to be Ground-filled most of the time (8 of 12), while treating that as a tendency rather than a constraint."
+    ],
+    "donts": [
+      "Don't introduce a resting box-shadow. Depth is tonal; reactive glow is a hover response.",
+      "Don't add a third surface tone. The system is Ground and Panel only.",
+      "Don't use hairline (#1C2E4A) for text.",
+      "Don't mix radii within a component family, or give a boxed action anything other than 8px. Radius is not a marker of clickability — navigation links, inline links and the wordmark are clickable with no radius, background or border."
+    ],
+    "remediationNotIncumbent": [
+      "Use #94A3B8 rather than #64748B for secondary text (WCAG AA). Draft PR #17 implements this site-wide; it is NOT incumbent behaviour.",
+      "Add a :focus-visible treatment. The incumbent system has none anywhere.",
+      "Add a prefers-reduced-motion override, including for the animate-pulse availability dot.",
+      "Remove the Google Fonts @import from globals.css so Inter loads once.",
+      "Replace inline JS hover handlers on navigation with CSS pseudo-classes."
+    ]
+  }
+}
