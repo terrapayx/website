@@ -58,10 +58,10 @@ export default function Footer() {
               <span className="font-bold text-base" style={{ color: '#E2EBF8' }}>Terra Pay</span>
               <span className="font-bold text-base" style={{ color: '#38BDF8' }}>X</span>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: '#64748B' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#94A3B8' }}>
               Cloud-native financial infrastructure and intelligent operational systems.
             </p>
-            <p className="text-xs leading-relaxed" style={{ color: '#64748B' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#94A3B8' }}>
               Platform · Labs · Advisory
             </p>
           </div>
@@ -96,10 +96,10 @@ export default function Footer() {
           {/* Legal entity. "Terra Pay X, Inc." is the registered name evidenced by the
               Stripe account (US corporation) and the Relay business banking relationship.
               The wordmark above remains the brand; this line carries the legal identity. */}
-          <p className="text-xs" style={{ color: '#64748B' }}>
+          <p className="text-xs" style={{ color: '#94A3B8' }}>
             &copy; 2026 Terra Pay X, Inc. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: '#64748B' }}>
+          <p className="text-xs" style={{ color: '#94A3B8' }}>
             Terra Pay X Labs — Advisory &amp; Innovation Division
           </p>
         </div>
