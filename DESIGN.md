@@ -6,8 +6,7 @@ colors:
   panel: "#0D1426"
   hairline: "#1C2E4A"
   read: "#E2EBF8"
-  aside: "#64748B"
-  aside-legible: "#94A3B8"
+  aside: "#94A3B8"
   signal-cyan: "#38BDF8"
   signal-cyan-light: "#7DD3FC"
   confirmation-teal: "#2DD4BF"
@@ -95,10 +94,21 @@ components:
 > `/impeccable document`. This records the **shipped** visual system as a pre-redesign baseline.
 > It is descriptive, not aspirational.
 >
-> **Pending delta — not incorporated.** Draft PR #17 (`redesign/terrapayx-p0-commercial-clarity`)
-> raises `aside` from `#64748B` to `#94A3B8` site-wide for WCAG AA, reframes the homepage hero
-> and root metadata around Labs, and reduces the hero to two CTAs. That branch is unmerged and is
-> deliberately **not** treated as incumbent here. Regenerate this file after #17 merges.
+> **PR #17 incorporated.** The P0 commercial-clarity slice merged as `2e455262` on
+> 2026-08-16T12:19:58Z and is part of this baseline, not a pending delta. It raised the secondary
+> text token to `#94A3B8` site-wide for WCAG AA, reframed the homepage hero and root metadata
+> around Labs, changed the strategy-session CTA from "Book" to "Request", and reduced the hero
+> from three CTAs to two.
+>
+> **Epoch discontinuity — 2026-08-16T12:21:10Z.** The Labs-first observation epoch begins at the
+> first successful production response after #17's deploy. Exactly one identifier terminates at
+> that boundary: `hero-explore-work`, final count **2**. Every surviving identifier continues
+> unbroken — `hero` (29), `ai-engineering-starter-kit` (22), `hero-starter-kit` (5),
+> `hero-strategy-session` (1). Pre-boundary collector baseline, taken 2026-08-16T12:15:40Z against
+> production SHA `c101dde`: **253 retained events, 33 unexplained rejects, 41 visitor IDs as an
+> upper bound** including known synthetic contamination (`v_probe`). `contact-compose-email` and
+> `contact-email-address` stood at **0** — verified as observed visitor behaviour, not an
+> instrumentation fault: both markers emit exactly one `engagement.cta.clicked` when tested.
 >
 > **How to read this file.** It is an **anti-reference**: a record of what shipped, so the redesign
 > can reject it deliberately rather than absorb it by default. Nothing here is a target. Where the
@@ -198,8 +208,9 @@ confirmation.
 - **Hairline** (`#1C2E4A`): every border, the dot-grid dot color, and the nav's bottom edge once
   scrolled. It is never used for text.
 - **Read** (`#E2EBF8`): all primary text, headings, and active navigation.
-- **Aside** (`#64748B`): secondary body copy, inactive navigation, footer text, captions.
-- **Aside Legible** (`#94A3B8`): a lighter secondary tone appearing in three places on `main`.
+- **Aside** (`#94A3B8`): all secondary body copy, inactive navigation, footer text, and captions.
+  Measures 7.80:1 on Ground and 7.15:1 on Panel — passes WCAG AA. It is the sole secondary text
+  tone; the former `#64748B` no longer appears anywhere in the source.
 
 ### Named Rules
 
@@ -222,14 +233,11 @@ is the majority pattern, not a rule: of the card surfaces on `main`, **8 use Gro
 Panel**. A redesign should treat tonal inversion as a recurring habit of the incumbent system, not
 as a law it obeys.
 
-**The Contrast Debt Rule.** `aside` (`#64748B`) measures 4.20:1 on Ground and 3.85:1 on Panel —
-below WCAG AA (4.5:1) for normal text, and it carries most secondary copy. `aside-legible`
-(`#94A3B8`) measures 7.80:1 and 7.15:1 but appears in only three places on `main`. This is a
-recorded defect of the incumbent system, not a style choice.
-
-> **Non-incumbent remediation.** "Use `#94A3B8` instead of `#64748B`" is a *correction*, not a
-> description of what shipped. It is not part of the baseline. Draft PR #17 implements it site-wide;
-> until that merges, `#64748B` is the incumbent secondary text color.
+**The Contrast Debt Rule — RESOLVED 2026-08-16.** The incumbent system carried `#64748B` as its
+secondary text tone at 4.20:1 on Ground and 3.85:1 on Panel, below WCAG AA (4.5:1) for normal
+text, across 19 sites. PR #17 (`2e455262`) raised it to `#94A3B8` (7.80:1 / 7.15:1) site-wide.
+Verified on this baseline: **`#64748B` occurs 0 times in the source.** The rule is retained as
+history so the next reader knows the current value was a correction, not an original choice.
 
 ## Typography
 
@@ -406,8 +414,8 @@ corrections to recorded defects, listed separately so the two are never confused
 These are properties of the shipped system, reproduced faithfully above, that should **not** carry
 into a redesign:
 
-- **[remediation]** `#64748B` fails WCAG AA at normal size (4.20:1 / 3.85:1). Use `#94A3B8`
-  (7.80:1 / 7.15:1) instead. Draft PR #17 implements this site-wide; it is not incumbent.
+- **[resolved]** The `#64748B` contrast debt is fixed. `#94A3B8` is now the only secondary text
+  tone (0 occurrences of `#64748B`). Listed here for history; no longer outstanding.
 - **[remediation]** No `:focus-visible` treatment exists anywhere in the system. Keyboard focus is
   effectively invisible. Any redesign must add one.
 - **[remediation]** No `prefers-reduced-motion` override exists, including for the animated
