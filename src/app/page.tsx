@@ -42,7 +42,7 @@ function Hero() {
           className="text-5xl sm:text-6xl font-bold tracking-tight leading-tight"
           style={{ color: textPrimary }}
         >
-          Move from AI experimentation to governed execution.
+          Terra Pay X Labs moves AI from experimentation to governed execution.
         </h1>
 
         <p className="text-xl sm:text-2xl font-medium" style={{ color: textMuted }}>
@@ -55,11 +55,7 @@ function Hero() {
           now in development.
         </p>
 
-        {/* D7 (RI-2 acceptance criteria): the homepage previously offered no path to the
-            only purchasable product — every CTA led to the advisory funnel. The product
-            CTA is ADDED alongside the advisory CTAs, not in place of them.
-
-            RI-3B / FOP-2: both remaining commercial paths retain bounded CTA observation.
+        {/* RI-3B / FOP-2: both remaining commercial paths retain bounded CTA observation.
             The former `hero-explore-work` signal was intentionally retired with the third CTA;
             this reduces the homepage CTA time series from three identifiers to two without
             changing the canonical event name or the surviving identifiers. */}
