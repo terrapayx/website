@@ -119,8 +119,9 @@ brief.
 Terra Pay X renders itself as instrumentation. The ground (`#020817`) is an unlit room; panels
 (`#0D1426`) are the surfaces that catch light; a dot-grid substrate sits beneath the hero at 40%
 opacity as the faint graph paper such rooms are built on. Against that near-monochrome darkness
-exactly one color is alive — Signal Cyan — and it is spent only on the things a visitor can act
-on or a system can confirm. Depth arrives largely as a response to attention: no surface carries a
+Signal Cyan is the visually dominant accent and often reads as the live channel, but the incumbent
+mapping is inconsistent: cyan also decorates, while teal also acts. Depth arrives largely as a
+response to attention: no surface carries a
 resting box-shadow, though the hero itself holds a permanent ambient glow.
 
 The density is generous rather than packed: an 1152px reading column, 80–96px between sections,
