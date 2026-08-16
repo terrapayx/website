@@ -26,8 +26,8 @@ typography:
     letterSpacing: "-0.025em"
   title:
     fontFamily: "Inter, system-ui, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 600
+    fontSize: "1.5rem"
+    fontWeight: 700
     lineHeight: 1.4
   body:
     fontFamily: "Inter, system-ui, sans-serif"
@@ -95,17 +95,29 @@ components:
 > raises `aside` from `#64748B` to `#94A3B8` site-wide for WCAG AA, reframes the homepage hero
 > and root metadata around Labs, and reduces the hero to two CTAs. That branch is unmerged and is
 > deliberately **not** treated as incumbent here. Regenerate this file after #17 merges.
+>
+> **How to read this file.** It is an **anti-reference**: a record of what shipped, so the redesign
+> can reject it deliberately rather than absorb it by default. Nothing here is a target. Where the
+> incumbent system is defective, the defect is reproduced faithfully and labelled — corrections are
+> segregated under *Recorded defects* and marked **[remediation]**, never mixed into the
+> description. Rules carry a strength: an **invariant** holds throughout the source; a **tendency**
+> is the majority pattern with counted exceptions. `.impeccable/design.json` carries the same
+> distinctions in machine-readable form.
 
 ## Overview
 
-**Creative North Star: "The Control Room"**
+**Incumbent creative metaphor: "The Control Room"**
+
+This metaphor is a *reading of what shipped*, not a direction to build toward. It is descriptive and
+explicitly non-aspirational. The redesign is not required to honor it, and should not treat it as a
+brief.
 
 Terra Pay X renders itself as instrumentation. The ground (`#020817`) is an unlit room; panels
 (`#0D1426`) are the surfaces that catch light; a dot-grid substrate sits beneath the hero at 40%
 opacity as the faint graph paper such rooms are built on. Against that near-monochrome darkness
 exactly one color is alive — Signal Cyan — and it is spent only on the things a visitor can act
-on or a system can confirm. Nothing glows at rest. Depth arrives as a response to attention, not
-as decoration.
+on or a system can confirm. Depth arrives largely as a response to attention: no surface carries a
+resting box-shadow, though the hero itself holds a permanent ambient glow.
 
 The density is generous rather than packed: an 1152px reading column, 80–96px between sections,
 32px inside feature panels. Type does almost all of the structural work, since the palette
@@ -123,10 +135,11 @@ evidence rather than as a starting point.
 **Key Characteristics:**
 - Near-black navy ground with a single raised panel tone; no third surface level
 - One live accent, one confirming accent, nothing else chromatic
-- Flat at rest; glow and lift exist only as interaction response
-- Hairline `1px` borders, never dividers or rules
+- No resting shadow anywhere; interactive surfaces gain glow and lift only on hover. The hero is the
+  exception — it carries a permanent ambient glow
+- Hairline `1px` borders used both as component outlines **and** as section/nav/footer dividers
 - One typeface carrying five roles through weight and scale alone
-- Wide-tracked uppercase micro-labels as the only typographic ornament
+- Wide-tracked uppercase micro-labels on eyebrows, though not on all small text
 
 ## Colors
 
@@ -161,14 +174,20 @@ confirmation.
 **The One Live Color Rule.** Signal Cyan marks what can be acted on. If an element is not
 clickable, not a state indicator, and not an eyebrow, it is not cyan. The scarcity is the signal.
 
-**The Inverted Card Rule.** Panels are lighter than the page; cards on panels are darker than the
-panel. Depth reads by tonal alternation rather than by shadow, and a card never repeats its
-container's tone.
+**The Inverted Card Pattern** (observed tendency, *not* an invariant). Panels are lighter than the
+page, and cards placed on panels are usually filled with Ground — darker than their container. This
+is the majority pattern, not a rule: of the card surfaces on `main`, **8 use Ground and 4 use
+Panel**. A redesign should treat tonal inversion as a recurring habit of the incumbent system, not
+as a law it obeys.
 
 **The Contrast Debt Rule.** `aside` (`#64748B`) measures 4.20:1 on Ground and 3.85:1 on Panel —
 below WCAG AA (4.5:1) for normal text, and it carries most secondary copy. `aside-legible`
-(`#94A3B8`) measures 7.80:1 and 7.15:1. This is a recorded defect of the incumbent system, not a
-style choice; PR #17 resolves it site-wide. Do not propagate `#64748B` to new normal-size text.
+(`#94A3B8`) measures 7.80:1 and 7.15:1 but appears in only three places on `main`. This is a
+recorded defect of the incumbent system, not a style choice.
+
+> **Non-incumbent remediation.** "Use `#94A3B8` instead of `#64748B`" is a *correction*, not a
+> description of what shipped. It is not part of the baseline. Draft PR #17 implements it site-wide;
+> until that merges, `#64748B` is the incumbent secondary text color.
 
 ## Typography
 
@@ -184,7 +203,8 @@ micro-label. The result is uniform and legible, and — recorded honestly — un
 - **Display** (700, `48px` → `60px` at ≥640px, line-height 1.25, tracking `-0.025em`): page hero
   headline. One per page, in the first viewport.
 - **Headline** (700, `30–36px`, line-height 1.25, tracking `-0.025em`): section openers.
-- **Title** (600, `20–24px`, line-height 1.4): card and panel headings.
+- **Title** (600–700, `20–24px`, line-height 1.4): card and panel headings. The homepage feature
+  cards sit at the top of that range — `24px` / weight 700.
 - **Body** (400, `16px`, line-height 1.625): paragraph copy, held to a `max-w-2xl` (672px)
   measure, roughly 70ch.
 - **Label** (500, `12px`, tracking `0.1em`, uppercase): eyebrows, badges, metadata, table keys.
@@ -192,11 +212,15 @@ micro-label. The result is uniform and legible, and — recorded honestly — un
 
 ### Named Rules
 
-**The Weight-Not-Family Rule.** Hierarchy comes from weight (400 / 500 / 600 / 700) and scale.
-The system loads exactly one family; a second typeface is a change of world, not a refinement.
+**The Weight-Not-Family Rule.** Hierarchy comes from weight (400 / 500 / 600 / 700) and scale. The
+system uses exactly one family — though it loads that one family through **two** paths: `next/font`
+in `layout.tsx` and a Google Fonts `@import` in `globals.css`. One family, two requests; the second
+is a defect, recorded below.
 
-**The Wide Label Rule.** Any text at `12px` is uppercase, weight 500, tracked to `0.1em`. Small
-type is never simply shrunken body copy.
+**The Eyebrow Label Pattern** (applies to eyebrows, *not* to all small text). Section eyebrows and
+hero badges at `12px` are uppercase, weight 500–600, tracked `0.1em`–`0.15em`. This is **not**
+universal to `12px`: of 91 `text-xs` uses on `main`, **45 are not uppercase** — status pills such as
+"In development", card body copy, and fine print all sit at `12px` in sentence case.
 
 ## Layout
 
@@ -207,8 +231,10 @@ grids to `max-w-4xl` (896px), so measure is controlled independently of containe
 Vertical rhythm alternates `80px` and `96px` between sections, with `32px` inside feature panels
 and `24px` inside smaller cards. Grids are shallow by intent: one column on mobile, two at
 `lg` (1024px) for the paired feature panels, three at `sm`/`md` for principle cards, with a
-uniform `24px` gap. Breakpoints are Tailwind defaults, and `sm` (640px) carries the most work —
-it is where the display size steps up and CTA rows change from stacked to inline.
+uniform `24px` gap. The project uses stock Tailwind breakpoints (it defines none of its own), and
+of that set only `sm` (640px), `md` (768px) and `lg` (1024px) appear in the source — `xl` and `2xl`
+are unused. Those three are observed usages, not the framework's full scale. `sm` carries the most
+work: it is where the display size steps up and CTA rows change from stacked to inline.
 
 The page banding is the structural device: Ground and Panel alternate down the page, and the hero
 closes with a `128px` gradient fade back to Ground so the first section emerges rather than
@@ -216,12 +242,14 @@ starts.
 
 ## Elevation & Depth
 
-The system is **flat at rest and has no resting shadow anywhere**. Depth is produced by three
-non-shadow means: tonal alternation between Ground and Panel, `1px` hairline borders, and a
-`blur(12px)` backdrop filter on the navigation once scrolled. A surface that is not being touched
-casts nothing.
+The system has **no resting box-shadow anywhere**. Depth is produced by three non-shadow means:
+tonal alternation between Ground and Panel, `1px` hairline borders, and a `blur(12px)` backdrop
+filter on the navigation once scrolled.
 
-Shadow exists only as interaction response, and only in one form.
+Shadow exists only as interaction response, and only in one form. Light, however, is not only an
+interaction response: the hero on `/` and `/labs` carries a **permanent ambient glow** — a
+`rgba(56,189,248,0.08)` elliptical gradient anchored to the top edge, rendered at rest and never
+triggered. Ambient glow on the hero and reactive glow on components are two different devices.
 
 ### Shadow Vocabulary
 - **Interaction glow** (`box-shadow: 0 0 30px rgba(56,189,248,0.12), 0 0 0 1px rgba(56,189,248,0.2)`):
@@ -230,8 +258,9 @@ Shadow exists only as interaction response, and only in one form.
 
 ### Named Rules
 
-**The Nothing Glows At Rest Rule.** Glow is a response to the cursor. A card, badge, or button
-that emits light without being touched is broken.
+**The No Reactive Glow At Rest Rule.** *Interactive* surfaces do not glow until touched — a card,
+badge, or button emitting light at rest is broken. This does not extend to the page: the hero's
+ambient glow is permanent and is part of the incumbent atmosphere, not a state.
 
 ## Shapes
 
@@ -243,7 +272,10 @@ Borders are always `1px` and always hairline-toned, except where a panel is deli
 — the Labs card takes a `1px` Signal Cyan border to mark it as the live commercial path while its
 sibling keeps hairline. That single substitution is the system's only structural emphasis device.
 
-There are no rules, dividers, or separators. Where a break is needed the page changes tone.
+The same hairline serves a second, structural role: **the system does use dividers.** On `main`
+there are 29 `borderTop` separators between sections, a `border-b` under the navigation once
+scrolled, and `borderTop` rules in the footer and the mobile nav panel. Tonal alternation and a
+hairline divider are used together, not as alternatives.
 
 ## Components
 
@@ -251,11 +283,14 @@ There are no rules, dividers, or separators. Where a break is needed the page ch
 - **Shape:** Softly rounded (`8px`), never pill, never square.
 - **Primary:** Signal Cyan fill with Ground-colored text, `12px 28px` padding, `14px` weight 600.
   Compact `8px 16px` variant in the navigation bar.
-- **Hover / Focus:** Background shifts to Signal Cyan Light over `200ms`. Hover is applied by
-  inline JS event handlers rather than CSS pseudo-classes, and there is **no focus-visible
-  treatment anywhere in the system** — a recorded gap, not a style.
+- **Hover:** only the navigation CTA has one — background shifts to Signal Cyan Light, applied by
+  inline JS event handlers rather than a CSS pseudo-class. **Page-level CTAs declare
+  `transition-all duration-200` but define no hover state to transition to**, so they are visually
+  inert under the cursor.
+- **Focus:** none. There is **no `:focus-visible` treatment anywhere in the system** — a recorded
+  gap, not a style.
 - **Ghost:** Transparent fill, `1px` hairline border, Read-colored text, identical geometry to
-  primary so the two align in a row.
+  primary so the two align in a row. No hover, no focus.
 
 ### Cards / Containers
 - **Corner Style:** `16px` for the two large feature panels, `12px` for principle and content
@@ -287,22 +322,39 @@ only texture and appears on exactly one surface per page.
 
 ## Do's and Don'ts
 
+These describe how the incumbent system behaves, so that a redesign can decide what to keep or
+reject deliberately. Items marked **[remediation]** are *not* incumbent behavior — they are
+corrections to recorded defects, listed separately so the two are never confused.
+
 ### Do:
-- **Do** spend Signal Cyan only on actionable or state-bearing elements, and keep it under
-  roughly 10% of any viewport.
-- **Do** place cards in Ground on Panel sections, preserving the inverted tonal relationship.
+- **Do** spend Signal Cyan only on actionable or state-bearing elements, and keep it under roughly
+  10% of any viewport.
 - **Do** carry hierarchy with weight and scale in Inter rather than reaching for a second family.
-- **Do** set any `12px` text as uppercase, weight 500, tracked `0.1em`.
+- **Do** set section eyebrows as uppercase, weight 500–600, tracked `0.1em`–`0.15em` — but do not
+  extend that to all `12px` text; badges and fine print are sentence case.
 - **Do** hold body copy to a `max-w-2xl` (672px) measure regardless of container width.
-- **Do** use `#94A3B8` for new secondary text, not `#64748B` — see The Contrast Debt Rule.
+- **Do** expect a card on a Panel section to be Ground-filled *most* of the time (8 of 12), while
+  treating that as a tendency rather than a constraint.
 
 ### Don't:
-- **Don't** introduce a resting shadow. Depth is tonal; glow is a hover response.
+- **Don't** introduce a resting box-shadow. Depth is tonal; reactive glow is a hover response.
 - **Don't** add a third surface tone. The system is Ground and Panel only.
-- **Don't** use hairline (`#1C2E4A`) for text or Aside (`#64748B`) for anything at normal size.
-- **Don't** apply Confirmation Teal to anything a visitor can click; it reports, it does not
-  invite.
-- **Don't** add rules, dividers, or separators — change tone instead.
+- **Don't** use hairline (`#1C2E4A`) for text.
+- **Don't** apply Confirmation Teal to anything a visitor can click; it reports, it does not invite.
 - **Don't** mix radii within a component family, or make an action anything other than `8px`.
-- **Don't** load a webfont via a stylesheet `@import`. `globals.css` currently does this
-  alongside `next/font`, loading Inter twice; that is a recorded defect, not a pattern to follow.
+
+### Recorded defects — do not inherit these
+
+These are properties of the shipped system, reproduced faithfully above, that should **not** carry
+into a redesign:
+
+- **[remediation]** `#64748B` fails WCAG AA at normal size (4.20:1 / 3.85:1). Use `#94A3B8`
+  (7.80:1 / 7.15:1) instead. Draft PR #17 implements this site-wide; it is not incumbent.
+- **[remediation]** No `:focus-visible` treatment exists anywhere in the system. Keyboard focus is
+  effectively invisible. Any redesign must add one.
+- **[remediation]** No `prefers-reduced-motion` override exists, including for the animated
+  availability indicator.
+- **[remediation]** Inter is loaded twice — `next/font` in `layout.tsx` plus a Google Fonts
+  `@import` in `globals.css`. Remove the `@import`.
+- **[remediation]** Hover states on navigation links and the nav CTA are applied through inline JS
+  event handlers rather than CSS pseudo-classes.
