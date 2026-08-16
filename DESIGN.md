@@ -147,16 +147,25 @@ A near-monochrome dark field interrupted by exactly one live hue, with a second 
 confirmation.
 
 ### Primary
-- **Signal Cyan** (`#38BDF8`): the only color a visitor may act on. Primary CTA fills, badge
-  borders and text, section eyebrow rules, icon strokes, hover glow, and the scrollbar thumb.
-  It never appears as body text and never fills a large area.
+- **Signal Cyan** (`#38BDF8`): the dominant accent, carrying both actionable and decorative work.
+  Actionable: primary CTA fills and the `X` of the wordmark. Semantic: badge borders and text,
+  section eyebrows. **Decorative:** capability-list icon strokes, the hero's permanent ambient
+  glow, the card hover glow, the scrollbar thumb, and the oversized principle numerals rendered at
+  `rgba(56,189,248,0.18)`. It never appears as body text.
 - **Signal Cyan Light** (`#7DD3FC`): hover state for filled cyan actions only. It exists to prove
   a button is live; it has no resting use anywhere in the system.
 
 ### Secondary
-- **Confirmation Teal** (`#2DD4BF`): reserved for states that have already resolved — checkmarks,
-  "Available today" availability badges, completed indicators. Where cyan invites action, teal
-  reports a fact. Roughly a quarter as frequent as cyan.
+- **Confirmation Teal** (`#2DD4BF`): carries **three unrelated roles** on `main`, which is itself
+  worth recording. (1) *Resolved state* — the "Available today" badge and its pulsing dot,
+  checkmark icons. (2) *Division / category marking* — the `divisionColor` applied to Labs-owned
+  entries. (3) *Action* — the hero "Get the Starter Kit" CTA is bordered and lettered in teal
+  (`page.tsx:79`). Roughly a quarter as frequent as cyan.
+
+> **Recorded defect — semantic inconsistency.** The same color simultaneously means "this has
+> already resolved", "this belongs to Labs", and "click this to buy". A visitor cannot learn what
+> teal means, because it does not mean one thing. This is a property of the shipped system, not a
+> deliberate scheme.
 
 ### Neutral
 - **Ground** (`#020817`): page background, and also the fill of cards that sit *on* panels. The
@@ -171,8 +180,18 @@ confirmation.
 
 ### Named Rules
 
-**The One Live Color Rule.** Signal Cyan marks what can be acted on. If an element is not
-clickable, not a state indicator, and not an eyebrow, it is not cyan. The scarcity is the signal.
+**The One Live Color Pattern** (measured tendency, *not* an invariant). Signal Cyan is the accent a
+visitor most often finds on something actionable, and the palette is otherwise near-monochrome — so
+cyan does read as the page's live channel. But it is not a reliable signal of interactivity in
+either direction, and the exceptions are numerous enough to name:
+
+- **Cyan without interaction:** capability-list icon strokes, the hero's permanent ambient glow,
+  the card hover glow, the scrollbar thumb, and the oversized principle numerals at
+  `rgba(56,189,248,0.18)`. None of these can be acted on.
+- **Interaction without cyan:** the hero "Get the Starter Kit" CTA is Confirmation Teal; ghost
+  buttons are hairline-bordered with Read-colored text; navigation links are Aside or Read.
+
+A redesign may well want a rule of this shape. The incumbent system does not have one.
 
 **The Inverted Card Pattern** (observed tendency, *not* an invariant). Panels are lighter than the
 page, and cards placed on panels are usually filled with Ground — darker than their container. This
@@ -264,9 +283,13 @@ ambient glow is permanent and is part of the incumbent atmosphere, not a state.
 
 ## Shapes
 
-Four radii, each bound to a role rather than to a size: `8px` for anything clickable, `12px` for
-standard cards, `16px` for the two large feature panels, and full-round for badges and status
-pills. The system never mixes them within one component family.
+Four radii, each bound to a role rather than to a size: `8px` for **boxed, button-like actions**
+(filled CTAs, ghost buttons, the nav CTA), `12px` for standard cards, `16px` for the two large
+feature panels, and full-round for badges and status pills. The system never mixes them within one
+component family.
+
+Radius is not a marker of clickability. Plain navigation links, inline text links, and the wordmark
+are all clickable and carry no radius, background, or border at all.
 
 Borders are always `1px` and always hairline-toned, except where a panel is deliberately promoted
 — the Labs card takes a `1px` Signal Cyan border to mark it as the live commercial path while its
@@ -291,6 +314,10 @@ hairline divider are used together, not as alternatives.
   gap, not a style.
 - **Ghost:** Transparent fill, `1px` hairline border, Read-colored text, identical geometry to
   primary so the two align in a row. No hover, no focus.
+- **Teal outline (the counterexample):** the hero "Get the Starter Kit" CTA — transparent fill,
+  `1px` **Confirmation Teal** border, teal text, same `12px 28px` / `8px` geometry (`page.tsx:79`).
+  It is the system's only teal action, and the reason Confirmation Teal cannot be described as
+  non-interactive.
 
 ### Cards / Containers
 - **Corner Style:** `16px` for the two large feature panels, `12px` for principle and content
@@ -304,7 +331,8 @@ hairline divider are used together, not as alternatives.
 - **Style:** Full-round, `12px` uppercase weight-500 text tracked to `0.1em`, on a 6–8% tint of
   its own accent with a 20–40% border of the same hue.
 - **Variants:** Signal Cyan for category and eyebrow use (`6px 16px`); Confirmation Teal for
-  resolved-state use such as availability (`4px 12px`), frequently with a leading dot or check.
+  availability (`4px 12px`) with a leading `animate-pulse` dot. Teal is not confined to badges —
+  see the teal CTA below and the semantic-inconsistency note under Colors.
 
 ### Navigation
 - **Style:** Fixed full-width, `64px` tall, contents held to the `max-w-6xl` column. Transparent
@@ -327,8 +355,9 @@ reject deliberately. Items marked **[remediation]** are *not* incumbent behavior
 corrections to recorded defects, listed separately so the two are never confused.
 
 ### Do:
-- **Do** spend Signal Cyan only on actionable or state-bearing elements, and keep it under roughly
-  10% of any viewport.
+- **Do** keep the palette near-monochrome, with accent coverage low — roughly 10% of any viewport.
+  Note that the incumbent system does *not* restrict Signal Cyan to actionable elements; see The One
+  Live Color Pattern for the counted exceptions.
 - **Do** carry hierarchy with weight and scale in Inter rather than reaching for a second family.
 - **Do** set section eyebrows as uppercase, weight 500–600, tracked `0.1em`–`0.15em` — but do not
   extend that to all `12px` text; badges and fine print are sentence case.
@@ -340,8 +369,7 @@ corrections to recorded defects, listed separately so the two are never confused
 - **Don't** introduce a resting box-shadow. Depth is tonal; reactive glow is a hover response.
 - **Don't** add a third surface tone. The system is Ground and Panel only.
 - **Don't** use hairline (`#1C2E4A`) for text.
-- **Don't** apply Confirmation Teal to anything a visitor can click; it reports, it does not invite.
-- **Don't** mix radii within a component family, or make an action anything other than `8px`.
+- **Don't** mix radii within a component family, or give a boxed action anything other than `8px`.
 
 ### Recorded defects — do not inherit these
 
@@ -358,3 +386,8 @@ into a redesign:
   `@import` in `globals.css`. Remove the `@import`.
 - **[remediation]** Hover states on navigation links and the nav CTA are applied through inline JS
   event handlers rather than CSS pseudo-classes.
+- **[remediation]** Confirmation Teal carries three unrelated meanings — resolved state, Labs
+  division marking, and a purchase action — so it teaches the visitor nothing. Pick one meaning per
+  accent.
+- **[remediation]** Page-level CTAs declare a `200ms` transition with no hover state defined, so
+  they are visually inert under the cursor.

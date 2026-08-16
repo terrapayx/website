@@ -113,6 +113,7 @@
         "role": "secondary",
         "displayName": "Confirmation Teal",
         "implemented": true,
+        "note": "Three unrelated roles on main: resolved state (availability badge + pulsing dot, checkmark icons), division/category marking (divisionColor on Labs entries), and ACTION (the hero 'Get the Starter Kit' CTA, page.tsx:79). Not a state-only color.",
         "canonical": "oklch(78.5% 0.133 181.9)",
         "tonalRampDerived": true,
         "tonalRamp": ["oklch(15% 0.133 181.9)", "oklch(26% 0.133 181.9)", "oklch(38% 0.133 181.9)", "oklch(49% 0.133 181.9)", "oklch(61% 0.133 181.9)", "oklch(72% 0.133 181.9)", "oklch(84% 0.133 181.9)", "oklch(95% 0.133 181.9)"]
@@ -165,7 +166,9 @@
       { "name": "no-reduced-motion", "detail": "No prefers-reduced-motion override exists, including for the animate-pulse availability dot.", "remediation": "Not addressed by PR #17." },
       { "name": "duplicate-webfont", "detail": "Inter is loaded twice: next/font in layout.tsx plus a render-blocking Google Fonts @import in globals.css.", "remediation": "Remove the @import. Not addressed by PR #17." },
       { "name": "contrast-debt", "detail": "#64748B carries most secondary copy at 4.20:1 / 3.85:1, below WCAG AA.", "remediation": "PR #17 raises it to #94A3B8 site-wide." },
-      { "name": "js-hover", "detail": "Navigation link and nav CTA hover states are applied by inline onMouseEnter/onMouseLeave handlers rather than CSS pseudo-classes.", "remediation": "Not addressed by PR #17." }
+      { "name": "js-hover", "detail": "Navigation link and nav CTA hover states are applied by inline onMouseEnter/onMouseLeave handlers rather than CSS pseudo-classes.", "remediation": "Not addressed by PR #17." },
+      { "name": "teal-semantic-ambiguity", "detail": "Confirmation Teal means resolved state, Labs division, and 'click to buy' simultaneously, so it teaches the visitor nothing.", "remediation": "Pick one meaning per accent. Not addressed by PR #17." },
+      { "name": "inert-cta-hover", "detail": "Page-level CTAs declare transition-all duration-200 but define no hover state, so they are visually inert under the cursor.", "remediation": "Not addressed by PR #17." }
     ]
   },
   "components": [
@@ -195,6 +198,15 @@
       "description": "Secondary action. Identical geometry to the primary so the two align in a row. No hover and no focus style in source.",
       "html": "<a class=\"ds-btn-ghost\" href=\"#\">Explore Our Work</a>",
       "css": ".ds-btn-ghost { display: inline-flex; align-items: center; background: transparent; color: #E2EBF8; padding: 12px 28px; border: 1px solid #1C2E4A; border-radius: 8px; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 200ms; }"
+    },
+    {
+      "name": "Teal Outline CTA (color-doctrine counterexample)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "fidelity": "faithful",
+      "description": "The hero 'Get the Starter Kit' action (page.tsx:79) — transparent fill, 1px Confirmation Teal border, teal text, same 12px 28px / 8px geometry as the other CTAs. Included deliberately as a counterexample: it is the system's only teal action and the reason Confirmation Teal cannot be described as non-interactive, and Signal Cyan cannot be described as the only actionable color. No hover, no focus, as shipped.",
+      "html": "<a class=\"ds-btn-teal\" href=\"#\">Get the Starter Kit</a>",
+      "css": ".ds-btn-teal { display: inline-flex; align-items: center; background: transparent; color: #2DD4BF; padding: 12px 28px; border: 1px solid #2DD4BF; border-radius: 8px; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 200ms; }"
     },
     {
       "name": "Signal Badge",
@@ -237,9 +249,9 @@
       "kind": "nav",
       "refersTo": "nav-shell",
       "fidelity": "faithful",
-      "description": "Fixed 64px shell in its scrolled state. Inactive links use the incumbent #64748B; active is #E2EBF8. In source, hover is applied by inline JS handlers; expressed here as :hover so the specimen renders live. No focus style exists in source.",
-      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav__brand\">Terra Pay</span><span class=\"ds-nav__links\"><a class=\"ds-nav__link ds-nav__link--active\" href=\"#\">Platform</a><a class=\"ds-nav__link\" href=\"#\">Labs</a><a class=\"ds-nav__link\" href=\"#\">About</a></span></nav>",
-      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 32px; height: 64px; padding: 0 24px; background: rgba(2,8,23,0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #1C2E4A; } .ds-nav__brand { font-family: Inter, system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.025em; color: #E2EBF8; } .ds-nav__links { display: flex; gap: 24px; } .ds-nav__link { font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #64748B; text-decoration: none; transition: color 200ms; } .ds-nav__link:hover, .ds-nav__link--active { color: #E2EBF8; }"
+      "description": "Fixed 64px shell in its scrolled state. The wordmark is two spans: 'Terra Pay' in Read and a Signal Cyan 'X', separated by a 4px gap — the only place the brand itself carries the accent. Inactive links use the incumbent #64748B; active is #E2EBF8. In source, hover is applied by inline JS handlers; expressed here as :hover so the specimen renders live. No focus style exists in source. Note the wordmark and links are clickable while carrying no radius, background or border.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav__brand\" href=\"#\">Terra Pay<span class=\"ds-nav__brand-x\">X</span></a><span class=\"ds-nav__links\"><a class=\"ds-nav__link ds-nav__link--active\" href=\"#\">Platform</a><a class=\"ds-nav__link\" href=\"#\">Labs</a><a class=\"ds-nav__link\" href=\"#\">About</a></span></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 32px; height: 64px; padding: 0 24px; background: rgba(2,8,23,0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #1C2E4A; } .ds-nav__brand { display: inline-flex; align-items: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.025em; color: #E2EBF8; text-decoration: none; } .ds-nav__brand-x { color: #38BDF8; } .ds-nav__links { display: flex; gap: 24px; } .ds-nav__link { font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #64748B; text-decoration: none; transition: color 200ms; } .ds-nav__link:hover, .ds-nav__link--active { color: #E2EBF8; }"
     },
     {
       "name": "Dot-Grid Hero Field",
@@ -260,14 +272,15 @@
     "antiReference": "The incumbent world reads as generic technical SaaS — dark navy plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. Recorded 2026-08-16 per the redesign audit.",
     "keyCharacteristics": [
       "Near-black navy ground with a single raised panel tone; no third surface level",
-      "One live accent, one confirming accent, nothing else chromatic",
+      "Two accents and nothing else chromatic — but neither maps cleanly to interactivity: cyan is also decorative, and teal is simultaneously a state, a category marker, and a purchase action",
       "No resting box-shadow anywhere; interactive surfaces gain glow and lift only on hover. The hero is the exception — it carries a permanent ambient glow",
       "Hairline 1px borders used both as component outlines and as section/nav/footer dividers",
       "One typeface carrying five roles through weight and scale alone",
       "Wide-tracked uppercase micro-labels on eyebrows, though not on all small text"
     ],
     "rules": [
-      { "name": "The One Live Color Rule", "body": "Signal Cyan marks what can be acted on. If an element is not clickable, not a state indicator, and not an eyebrow, it is not cyan. The scarcity is the signal.", "section": "colors", "strength": "invariant" },
+      { "name": "The One Live Color Pattern", "body": "Signal Cyan is the accent most often found on something actionable, and the palette is otherwise near-monochrome, so cyan does read as the page's live channel. It is NOT a reliable signal of interactivity in either direction. Cyan without interaction: capability-list icon strokes, the hero's permanent ambient glow, the card hover glow, the scrollbar thumb, and the oversized principle numerals at rgba(56,189,248,0.18). Interaction without cyan: the hero 'Get the Starter Kit' CTA is Confirmation Teal, ghost buttons are hairline-bordered with Read text, navigation links are Aside or Read.", "section": "colors", "strength": "tendency" },
+      { "name": "The Teal Ambiguity Defect", "body": "Confirmation Teal carries three unrelated roles on main: resolved state (the 'Available today' badge and its pulsing dot, checkmark icons), division/category marking (divisionColor on Labs-owned entries), and action (the hero 'Get the Starter Kit' CTA, page.tsx:79). A visitor cannot learn what teal means because it does not mean one thing. Recorded as an incumbent defect, not a scheme.", "section": "colors", "strength": "defect" },
       { "name": "The Inverted Card Pattern", "body": "Panels are lighter than the page, and cards placed on panels are usually filled with Ground — darker than their container. This is the majority pattern, not a rule: of the card surfaces on main, 8 use Ground and 4 use Panel.", "section": "colors", "strength": "tendency" },
       { "name": "The Contrast Debt Rule", "body": "aside (#64748B) measures 4.20:1 on Ground and 3.85:1 on Panel — below WCAG AA (4.5:1) for normal text, and it carries most secondary copy. aside-legible (#94A3B8) measures 7.80:1 and 7.15:1 but appears in only three places on main. A recorded defect of the incumbent system.", "section": "colors", "strength": "defect" },
       { "name": "The Weight-Not-Family Rule", "body": "Hierarchy comes from weight (400/500/600/700) and scale. The system uses exactly one family — though it loads that one family through two paths: next/font in layout.tsx and a Google Fonts @import in globals.css.", "section": "typography", "strength": "invariant" },
@@ -275,7 +288,7 @@
       { "name": "The No Reactive Glow At Rest Rule", "body": "Interactive surfaces do not glow until touched — a card, badge, or button emitting light at rest is broken. This does not extend to the page: the hero's ambient glow is permanent and is part of the incumbent atmosphere, not a state.", "section": "elevation", "strength": "invariant" }
     ],
     "dos": [
-      "Do spend Signal Cyan only on actionable or state-bearing elements, and keep it under roughly 10% of any viewport.",
+      "Do keep the palette near-monochrome, with accent coverage low — roughly 10% of any viewport. Note the incumbent system does NOT restrict Signal Cyan to actionable elements; see The One Live Color Pattern for counted exceptions.",
       "Do carry hierarchy with weight and scale in Inter rather than reaching for a second family.",
       "Do set section eyebrows as uppercase, weight 500-600, tracked 0.1em-0.15em — but do not extend that to all 12px text; badges and fine print are sentence case.",
       "Do hold body copy to a max-w-2xl (672px) measure regardless of container width.",
@@ -285,8 +298,7 @@
       "Don't introduce a resting box-shadow. Depth is tonal; reactive glow is a hover response.",
       "Don't add a third surface tone. The system is Ground and Panel only.",
       "Don't use hairline (#1C2E4A) for text.",
-      "Don't apply Confirmation Teal to anything a visitor can click; it reports, it does not invite.",
-      "Don't mix radii within a component family, or make an action anything other than 8px."
+      "Don't mix radii within a component family, or give a boxed action anything other than 8px. Radius is not a marker of clickability — navigation links, inline links and the wordmark are clickable with no radius, background or border."
     ],
     "remediationNotIncumbent": [
       "Use #94A3B8 rather than #64748B for secondary text (WCAG AA). Draft PR #17 implements this site-wide; it is NOT incumbent behaviour.",
