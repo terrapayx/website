@@ -9,9 +9,6 @@
     "role": "anti-reference",
     "sourceRepo": "terrapayx/website",
     "sourceRef": "main",
-    "sourceSha": "2e455262",
-    "extractedAt": "2026-08-16T12:26:00Z",
-    "extractedBy": "/impeccable document (scan mode, Impeccable 4.0.4)",
     "extractionIntent": "Record the SHIPPED visual system as a post-P0 baseline so the redesign can treat it as evidence and anti-reference. Descriptive only. Nothing in this file is a target, a recommendation, or a direction to build toward.",
     "confirmedAntiReference": "The incumbent world reads as generic technical SaaS — dark navy plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. Recorded 2026-08-16 per the redesign audit.",
     "corroboration": {
@@ -25,9 +22,15 @@
       "disposition": "Left unfixed and unsuppressed. No ignore rule added. Fixing would be a source change in a documentation-only capture; suppressing would delete evidence a later verification pass should be able to re-derive."
     },
     "regeneration": {
-      "instruction": "Re-run `/impeccable document` from the repository root after PR #17 merges, then replace both DESIGN.md and this sidecar. Do not hand-patch either file to track a branch — the baseline must always describe a merged state.",
+      "instruction": "Re-run `/impeccable document` from the repository root and replace both artifacts when a future trigger fires. Do not hand-patch either file to track an unmerged branch — the baseline must always describe a merged state. If the generator is not re-run, record the update as a stage-2 measured reconciliation in provenance.stages rather than claiming generator output.",
       "command": "/impeccable document",
-      "regenerateWhen": "Any change to tailwind.config.ts, src/app/globals.css, or the component tree."
+      "regenerateWhen": [
+        "Any change to tailwind.config.ts",
+        "Any change to src/app/globals.css",
+        "Any structural change to the component tree",
+        "Adoption of a new Impeccable major version"
+      ],
+      "note": "PR #17 is already incorporated; it is not a pending trigger."
     },
     "knownDefectsReproducedFaithfully": [
       "Component specimens use #94A3B8 for secondary text, matching what main now ships after PR #17. The former #64748B no longer appears in source.",
@@ -106,8 +109,49 @@
       "notes": [
         "contact-* zeros verified as observed visitor behaviour, not instrumentation failure: both markers emit exactly one engagement.cta.clicked when tested locally with the non-polluting capture-phase method.",
         "33 rejects carry raw='' and blank reason; filed as terrapayx/growth-observation#5. Rejection retention works; A9 diagnostics do not."
-      ]
-    }
+      ],
+      "evidence": {
+        "source": "Full-table scan of terrapayx-observation-events (ap-southeast-1, account 163547780061)",
+        "takenAt": "2026-08-16T12:15:40Z",
+        "againstProductionSha": "c101dde",
+        "completeness": "LastEvaluatedKey: null — complete scan, not a page",
+        "rowsTotal": 286,
+        "rejectDefect": "https://github.com/terrapayx/growth-observation/issues/5"
+      },
+      "boundedClaim": "Bounded to identifiers present in the measured retained set at the baseline scan. Does not assert that no other identifier exists anywhere in the source.",
+      "rowsWithoutResourceBreakdown": {
+        "engagement.page.viewed": 84,
+        "acquisition.visit.landed": 61,
+        "engagement.page.dwelled": 46,
+        "engagement.section.viewed": 2
+      }
+    },
+    "provenance": {
+      "stages": [
+        {
+          "stage": 1,
+          "kind": "generator-extraction",
+          "tool": "/impeccable document (scan mode, Impeccable 4.0.4)",
+          "sourceRef": "main",
+          "sourceSha": "12a2254",
+          "at": "2026-08-16T10:45:11Z",
+          "note": "Original extraction. Produced the first version of these artifacts."
+        },
+        {
+          "stage": 2,
+          "kind": "measured-reconciliation",
+          "tool": "manual, mechanically re-counted against source",
+          "sourceRef": "main",
+          "sourceSha": "2e455262",
+          "at": "2026-08-16T12:26:00Z",
+          "generatorRerun": false,
+          "note": "After PR #17 merged, the generator was NOT re-run. Every claim was re-counted against 2e455262 and the artifacts edited only where a measurement changed. These artifacts describe 2e455262 but are not generator output for that SHA."
+        }
+      ],
+      "describesSha": "2e455262"
+    },
+    "sourceSha": "2e455262",
+    "sourceShaNote": "Describes 2e455262 via stage-2 measured reconciliation; stage-1 generator output was 12a2254. See provenance.stages."
   },
   "extensions": {
     "colorMeta": {
@@ -459,8 +503,8 @@
       "kind": "chip",
       "refersTo": "badge-signal",
       "fidelity": "faithful",
-      "description": "Hero eyebrow. Full-round, wide-tracked uppercase micro-label.",
-      "html": "<span class=\"ds-badge-signal\">Cloud-Native · AI-Governed · Production-Ready</span>",
+      "description": "Homepage hero eyebrow as shipped on 2e455262 (page.tsx:38). Full-round, wide-tracked uppercase micro-label. The pre-P0 string 'Cloud-Native · AI-Governed · Production-Ready' was retired by PR #17 and occurs 0 times in the source.",
+      "html": "<span class=\"ds-badge-signal\">Terra Pay X Labs · Available today</span>",
       "css": ".ds-badge-signal { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; border: 1px solid rgba(56,189,248,0.4); background: rgba(56,189,248,0.06); color: #38BDF8; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }"
     },
     {
@@ -504,8 +548,8 @@
       "kind": "custom",
       "refersTo": null,
       "fidelity": "faithful",
-      "description": "The system's only texture: 1px hairline dots on a 32px pitch at 40% opacity, under a PERMANENT ambient cyan glow anchored to the top edge. The glow is rendered at rest, not on interaction.",
-      "html": "<div class=\"ds-hero\"><div class=\"ds-hero__grid\"></div><div class=\"ds-hero__glow\"></div><span class=\"ds-hero__label\">Cloud-Native · AI-Governed</span></div>",
+      "description": "The system's only texture: 1px hairline dots on a 32px pitch at 40% opacity, under a PERMANENT ambient cyan glow anchored to the top edge. The glow is rendered at rest, not on interaction. Label copy is the shipped homepage hero badge on 2e455262.",
+      "html": "<div class=\"ds-hero\"><div class=\"ds-hero__grid\"></div><div class=\"ds-hero__glow\"></div><span class=\"ds-hero__label\">Terra Pay X Labs · Available today</span></div>",
       "css": ".ds-hero { position: relative; overflow: hidden; min-height: 200px; display: flex; align-items: center; justify-content: center; background: #020817; } .ds-hero__grid { position: absolute; inset: 0; opacity: 0.4; background-image: radial-gradient(circle, #1C2E4A 1px, transparent 1px); background-size: 32px 32px; } .ds-hero__glow { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(56,189,248,0.08) 0%, transparent 70%); } .ds-hero__label { position: relative; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #38BDF8; }"
     }
   ],

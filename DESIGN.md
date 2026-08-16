@@ -90,9 +90,16 @@ components:
 
 # Design System: Terra Pay X
 
-> **Provenance.** Extracted from `terrapayx/website` at `main` (`12a2254`) on 2026-08-16 by
-> `/impeccable document`. This records the **shipped** visual system as a pre-redesign baseline.
-> It is descriptive, not aspirational.
+> **Provenance — two stages.**
+>
+> 1. **Original extraction.** `/impeccable document` (scan mode, Impeccable 4.0.4) run against
+>    `terrapayx/website` at `main` `12a2254` on 2026-08-16.
+> 2. **Post-merge measured reconciliation.** After PR #17 merged as `2e455262`, the generator was
+>    **not** re-run. Every claim in this file was instead re-counted mechanically against
+>    `2e455262` and the artifacts edited only where a measurement changed. This file therefore
+>    describes `2e455262`, but it is not generator output for that SHA.
+>
+> This records the **shipped** visual system as a baseline. It is descriptive, not aspirational.
 >
 > **PR #17 incorporated.** The P0 commercial-clarity slice merged as `2e455262` on
 > 2026-08-16T12:19:58Z and is part of this baseline, not a pending delta. It raised the secondary
@@ -101,14 +108,28 @@ components:
 > from three CTAs to two.
 >
 > **Epoch discontinuity — 2026-08-16T12:21:10Z.** The Labs-first observation epoch begins at the
-> first successful production response after #17's deploy. Exactly one identifier terminates at
-> that boundary: `hero-explore-work`, final count **2**. Every surviving identifier continues
-> unbroken — `hero` (29), `ai-engineering-starter-kit` (22), `hero-starter-kit` (5),
-> `hero-strategy-session` (1). Pre-boundary collector baseline, taken 2026-08-16T12:15:40Z against
-> production SHA `c101dde`: **253 retained events, 33 unexplained rejects, 41 visitor IDs as an
-> upper bound** including known synthetic contamination (`v_probe`). `contact-compose-email` and
-> `contact-email-address` stood at **0** — verified as observed visitor behaviour, not an
-> instrumentation fault: both markers emit exactly one `engagement.cta.clicked` when tested.
+> first successful production response after #17's deploy.
+>
+> **Evidence.** Full-table scan of `terrapayx-observation-events` (`ap-southeast-1`, account
+> `163547780061`) taken 2026-08-16T12:15:40Z against production SHA `c101dde`. Complete scan,
+> `LastEvaluatedKey: null` — 286 rows: **253 retained events, 33 rejects**, **41 distinct
+> `visitorId`s as an upper bound** including known synthetic contamination (`v_probe` /
+> `eventId: probe-post-fix`). The rejects are characterised in
+> [terrapayx/growth-observation#5](https://github.com/terrapayx/growth-observation/issues/5).
+>
+> **Of the identifiers observed in that retained set, one terminates at the boundary:**
+> `hero-explore-work`, final count **2**. The others carry across with their pre-boundary counts —
+> `hero` (section, 29), `ai-engineering-starter-kit` (product, 22), `hero-starter-kit` (cta, 5),
+> `hero-strategy-session` (cta, 1), `verification` (section, 1), `contact-compose-email` (cta, 0),
+> `contact-email-address` (cta, 0). This statement is bounded to identifiers present in the
+> measured set; it does not assert that no other identifier exists anywhere in the source.
+>
+> A further **193 rows carry no `resource`** and are attributed to no identifier: `page.viewed`
+> (84), `visit.landed` (61), `page.dwelled` (46), `section.viewed` (2).
+>
+> The two `contact-*` zeros are **observed visitor behaviour, not an instrumentation fault**: both
+> markers were tested locally with the non-polluting capture-phase method and each emits exactly
+> one `engagement.cta.clicked`.
 >
 > **How to read this file.** It is an **anti-reference**: a record of what shipped, so the redesign
 > can reject it deliberately rather than absorb it by default. Nothing here is a target. Where the
