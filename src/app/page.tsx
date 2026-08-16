@@ -6,7 +6,8 @@ const border = '#1C2E4A';
 const accent = '#38BDF8';
 const secondary = '#2DD4BF';
 const textPrimary = '#E2EBF8';
-const textMuted = '#64748B';
+// WCAG AA on both primary dark surfaces at normal body-text sizes.
+const textMuted = '#94A3B8';
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
@@ -19,7 +20,7 @@ function Hero() {
     <section
       data-observe-surface="section"
       data-observe-id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-16 overflow-hidden"
+      className="relative min-h-[80svh] flex flex-col items-center justify-center text-center px-6 pt-24 pb-16 overflow-hidden"
       style={{ background: bg }}
     >
       <div className="absolute inset-0 dot-grid opacity-40 pointer-events-none" />
@@ -34,35 +35,30 @@ function Hero() {
             background: 'rgba(56,189,248,0.06)',
           }}
         >
-          Cloud-Native · AI-Governed · Production-Ready
+          Terra Pay X Labs · Available today
         </div>
 
         <h1
           className="text-5xl sm:text-6xl font-bold tracking-tight leading-tight"
           style={{ color: textPrimary }}
         >
-          Terra Pay X
+          Terra Pay X Labs designs governed AI systems for production engineering teams.
         </h1>
 
         <p className="text-xl sm:text-2xl font-medium" style={{ color: textMuted }}>
-          Cloud-native financial infrastructure and intelligent operational systems.
+          AI engineering systems built with financial-grade discipline.
         </p>
 
         <p className="max-w-2xl text-base leading-relaxed" style={{ color: textMuted }}>
-          Terra Pay X builds secure, observable payments infrastructure powered by modern cloud
-          architecture — and helps organizations deploy AI workforces, governance systems, and
-          operational architectures through Terra Pay X Labs.
+          Terra Pay X Labs designs governed AI delivery systems, operational workflows, and
+          production controls. The same discipline also powers the Terra Pay X payments platform
+          now in development.
         </p>
 
-        {/* D7 (RI-2 acceptance criteria): the homepage previously offered no path to the
-            only purchasable product — every CTA led to the advisory funnel. The product
-            CTA is ADDED alongside the advisory CTAs, not in place of them.
-
-            RI-3B / FOP-2: all three now carry `data-observe-surface="cta"`. Until this
-            delivery the site's primary calls to action were entirely unobservable —
-            `commerce.checkout.started` covered only the product-page CTA. The id is a
-            data attribute rather than part of the event name, because a name per CTA
-            would be unbounded cardinality. */}
+        {/* RI-3B / FOP-2: both remaining commercial paths retain bounded CTA observation.
+            The former `hero-explore-work` signal was intentionally retired with the third CTA;
+            this reduces the homepage CTA time series from three identifiers to two without
+            changing the canonical event name or the surviving identifiers. */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
           <Link
             href="/book"
@@ -71,7 +67,7 @@ function Hero() {
             data-observe-surface="cta"
             data-observe-id="hero-strategy-session"
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
           <Link
             href="/products/ai-engineering-starter-kit"
@@ -81,15 +77,6 @@ function Hero() {
             data-observe-id="hero-starter-kit"
           >
             Get the Starter Kit
-          </Link>
-          <Link
-            href="#divisions"
-            className="px-7 py-3 rounded-lg text-sm font-semibold transition-all duration-200"
-            style={{ border: `1px solid ${border}`, color: textPrimary }}
-            data-observe-surface="cta"
-            data-observe-id="hero-explore-work"
-          >
-            Explore Our Work
           </Link>
         </div>
       </div>
@@ -120,7 +107,7 @@ const labsCapabilities = [
 
 function Divisions() {
   return (
-    <section id="divisions" className="py-24 px-6" style={{ background: surface }}>
+    <section className="py-24 px-6" style={{ background: surface }}>
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <p
@@ -259,7 +246,7 @@ function Divisions() {
                 className="flex-1 inline-flex justify-center px-4 py-2.5 rounded-lg text-sm font-semibold"
                 style={{ background: accent, color: bg }}
               >
-                Book a Strategy Session
+                Request a Strategy Session
               </Link>
               <Link
                 href="/labs"
@@ -491,7 +478,7 @@ function FinalCTA() {
             className="px-7 py-3 rounded-lg text-sm font-semibold"
             style={{ background: accent, color: bg }}
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
           <Link
             href="/labs"

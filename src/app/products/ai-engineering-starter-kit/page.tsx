@@ -19,7 +19,8 @@ const border = '#1C2E4A';
 const accent = '#38BDF8';
 const secondary = '#2DD4BF';
 const textPrimary = '#E2EBF8';
-const textMuted = '#64748B';
+// WCAG AA on both primary dark surfaces at normal body-text sizes.
+const textMuted = '#94A3B8';
 
 // Founding-customer commercial terms. Kept as named constants so copy stays
 // consistent across the hero badge and the pricing section.

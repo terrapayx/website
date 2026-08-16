@@ -59,12 +59,12 @@ export default function Nav() {
               key={link.href}
               href={link.href}
               className="text-sm font-medium transition-colors duration-200"
-              style={{ color: pathname.startsWith(link.href) ? '#E2EBF8' : '#64748B' }}
+              style={{ color: pathname.startsWith(link.href) ? '#E2EBF8' : '#94A3B8' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = '#E2EBF8')}
               onMouseLeave={(e) =>
                 (e.currentTarget.style.color = pathname.startsWith(link.href)
                   ? '#E2EBF8'
-                  : '#64748B')
+                  : '#94A3B8')
               }
             >
               {link.label}
@@ -80,7 +80,7 @@ export default function Nav() {
             onMouseEnter={(e) => (e.currentTarget.style.background = '#7DD3FC')}
             onMouseLeave={(e) => (e.currentTarget.style.background = '#38BDF8')}
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
 
           <button
@@ -120,7 +120,7 @@ export default function Nav() {
               key={link.href}
               href={link.href}
               className="text-sm font-medium py-2.5"
-              style={{ color: pathname.startsWith(link.href) ? '#E2EBF8' : '#64748B' }}
+              style={{ color: pathname.startsWith(link.href) ? '#E2EBF8' : '#94A3B8' }}
             >
               {link.label}
             </Link>
@@ -131,7 +131,7 @@ export default function Nav() {
               className="flex justify-center px-4 py-3 rounded-lg text-sm font-semibold"
               style={{ background: '#38BDF8', color: '#020817' }}
             >
-              Book a Strategy Session
+              Request a Strategy Session
             </Link>
           </div>
         </div>

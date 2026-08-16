@@ -19,7 +19,7 @@ const border = '#1C2E4A';
 const accent = '#38BDF8';
 const secondary = '#2DD4BF';
 const textPrimary = '#E2EBF8';
-const textMuted = '#64748B';
+const textMuted = '#94A3B8';
 
 const useCases = [
   {
@@ -244,7 +244,7 @@ export default function SolutionsPage() {
               className="px-7 py-3 rounded-lg text-sm font-semibold"
               style={{ background: accent, color: bg }}
             >
-              Book a Strategy Session
+              Request a Strategy Session
             </Link>
             <Link
               href="/services"

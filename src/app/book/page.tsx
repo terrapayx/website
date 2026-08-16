@@ -19,7 +19,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Book a Strategy Session — Terra Pay X Labs',
+  title: 'Request a Strategy Session — Terra Pay X Labs',
   description:
     'Request a strategy session with Terra Pay X Labs — a direct conversation about your AI state, your challenges, and what execution looks like in your context.',
 };
@@ -30,7 +30,7 @@ const border = '#1C2E4A';
 const accent = '#38BDF8';
 const secondary = '#2DD4BF';
 const textPrimary = '#E2EBF8';
-const textMuted = '#64748B';
+const textMuted = '#94A3B8';
 
 const CONTACT_EMAIL = 'labs@terrapayx.com';
 
@@ -85,7 +85,7 @@ export default function BookPage() {
             Strategy Session
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight" style={{ color: textPrimary }}>
-            Book a Strategy Session
+            Request a Strategy Session
           </h1>
           <p className="text-lg leading-relaxed max-w-xl" style={{ color: textMuted }}>
             A direct conversation about your organization&apos;s AI state, your biggest
