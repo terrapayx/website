@@ -14,7 +14,7 @@ const surface = '#0D1426';
 const border = '#1C2E4A';
 const accent = '#38BDF8';
 const textPrimary = '#E2EBF8';
-const textMuted = '#64748B';
+const textMuted = '#94A3B8';
 
 export function LegalSection({ heading, children }: { heading: string; children: ReactNode }) {
   return (
