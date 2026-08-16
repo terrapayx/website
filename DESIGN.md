@@ -1,0 +1,308 @@
+---
+name: Terra Pay X
+description: Governed AI engineering and payments infrastructure — instrumentation rendered as interface
+colors:
+  ground: "#020817"
+  panel: "#0D1426"
+  hairline: "#1C2E4A"
+  read: "#E2EBF8"
+  aside: "#64748B"
+  aside-legible: "#94A3B8"
+  signal-cyan: "#38BDF8"
+  signal-cyan-light: "#7DD3FC"
+  confirmation-teal: "#2DD4BF"
+typography:
+  display:
+    fontFamily: "Inter, system-ui, sans-serif"
+    fontSize: "3rem"
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: "-0.025em"
+  headline:
+    fontFamily: "Inter, system-ui, sans-serif"
+    fontSize: "1.875rem"
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: "-0.025em"
+  title:
+    fontFamily: "Inter, system-ui, sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 600
+    lineHeight: 1.4
+  body:
+    fontFamily: "Inter, system-ui, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.625
+  label:
+    fontFamily: "Inter, system-ui, sans-serif"
+    fontSize: "0.75rem"
+    fontWeight: 500
+    letterSpacing: "0.1em"
+rounded:
+  action: "8px"
+  panel: "12px"
+  feature: "16px"
+  pill: "9999px"
+spacing:
+  gutter: "24px"
+  card: "32px"
+  section: "80px"
+  section-major: "96px"
+components:
+  button-primary:
+    backgroundColor: "{colors.signal-cyan}"
+    textColor: "{colors.ground}"
+    rounded: "{rounded.action}"
+    padding: "12px 28px"
+    typography: "{typography.label}"
+  button-primary-hover:
+    backgroundColor: "{colors.signal-cyan-light}"
+    textColor: "{colors.ground}"
+  button-ghost:
+    backgroundColor: "transparent"
+    textColor: "{colors.read}"
+    rounded: "{rounded.action}"
+    padding: "12px 28px"
+  badge-signal:
+    backgroundColor: "rgba(56,189,248,0.06)"
+    textColor: "{colors.signal-cyan}"
+    rounded: "{rounded.pill}"
+    padding: "6px 16px"
+  badge-confirmation:
+    backgroundColor: "rgba(45,212,191,0.08)"
+    textColor: "{colors.confirmation-teal}"
+    rounded: "{rounded.pill}"
+    padding: "4px 12px"
+  card-panel:
+    backgroundColor: "{colors.ground}"
+    textColor: "{colors.read}"
+    rounded: "{rounded.feature}"
+    padding: "32px"
+  nav-shell:
+    backgroundColor: "rgba(2,8,23,0.96)"
+    textColor: "{colors.read}"
+    height: "64px"
+---
+
+# Design System: Terra Pay X
+
+> **Provenance.** Extracted from `terrapayx/website` at `main` (`12a2254`) on 2026-08-16 by
+> `/impeccable document`. This records the **shipped** visual system as a pre-redesign baseline.
+> It is descriptive, not aspirational.
+>
+> **Pending delta — not incorporated.** Draft PR #17 (`redesign/terrapayx-p0-commercial-clarity`)
+> raises `aside` from `#64748B` to `#94A3B8` site-wide for WCAG AA, reframes the homepage hero
+> and root metadata around Labs, and reduces the hero to two CTAs. That branch is unmerged and is
+> deliberately **not** treated as incumbent here. Regenerate this file after #17 merges.
+
+## Overview
+
+**Creative North Star: "The Control Room"**
+
+Terra Pay X renders itself as instrumentation. The ground (`#020817`) is an unlit room; panels
+(`#0D1426`) are the surfaces that catch light; a dot-grid substrate sits beneath the hero at 40%
+opacity as the faint graph paper such rooms are built on. Against that near-monochrome darkness
+exactly one color is alive — Signal Cyan — and it is spent only on the things a visitor can act
+on or a system can confirm. Nothing glows at rest. Depth arrives as a response to attention, not
+as decoration.
+
+The density is generous rather than packed: an 1152px reading column, 80–96px between sections,
+32px inside feature panels. Type does almost all of the structural work, since the palette
+refuses to. Hierarchy is carried by weight and scale in a single family, with a wide-tracked
+uppercase micro-label doing the job that a second typeface would do in a warmer system.
+
+The character this produces is precise, quiet, and slightly clinical — a system that would rather
+be trusted than liked. That is also its limitation, and it is recorded here deliberately.
+
+**Confirmed anti-reference:** the incumbent world reads as generic technical SaaS — dark navy
+plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. Recorded
+2026-08-16 per the redesign audit. Capturing it here is what allows the next phase to treat it as
+evidence rather than as a starting point.
+
+**Key Characteristics:**
+- Near-black navy ground with a single raised panel tone; no third surface level
+- One live accent, one confirming accent, nothing else chromatic
+- Flat at rest; glow and lift exist only as interaction response
+- Hairline `1px` borders, never dividers or rules
+- One typeface carrying five roles through weight and scale alone
+- Wide-tracked uppercase micro-labels as the only typographic ornament
+
+## Colors
+
+A near-monochrome dark field interrupted by exactly one live hue, with a second reserved for
+confirmation.
+
+### Primary
+- **Signal Cyan** (`#38BDF8`): the only color a visitor may act on. Primary CTA fills, badge
+  borders and text, section eyebrow rules, icon strokes, hover glow, and the scrollbar thumb.
+  It never appears as body text and never fills a large area.
+- **Signal Cyan Light** (`#7DD3FC`): hover state for filled cyan actions only. It exists to prove
+  a button is live; it has no resting use anywhere in the system.
+
+### Secondary
+- **Confirmation Teal** (`#2DD4BF`): reserved for states that have already resolved — checkmarks,
+  "Available today" availability badges, completed indicators. Where cyan invites action, teal
+  reports a fact. Roughly a quarter as frequent as cyan.
+
+### Neutral
+- **Ground** (`#020817`): page background, and also the fill of cards that sit *on* panels. The
+  system inverts the usual relationship — cards are darker than the sections containing them.
+- **Panel** (`#0D1426`): raised section backgrounds, used to band the page into alternating
+  registers. The only other surface tone in the system.
+- **Hairline** (`#1C2E4A`): every border, the dot-grid dot color, and the nav's bottom edge once
+  scrolled. It is never used for text.
+- **Read** (`#E2EBF8`): all primary text, headings, and active navigation.
+- **Aside** (`#64748B`): secondary body copy, inactive navigation, footer text, captions.
+- **Aside Legible** (`#94A3B8`): a lighter secondary tone appearing in three places on `main`.
+
+### Named Rules
+
+**The One Live Color Rule.** Signal Cyan marks what can be acted on. If an element is not
+clickable, not a state indicator, and not an eyebrow, it is not cyan. The scarcity is the signal.
+
+**The Inverted Card Rule.** Panels are lighter than the page; cards on panels are darker than the
+panel. Depth reads by tonal alternation rather than by shadow, and a card never repeats its
+container's tone.
+
+**The Contrast Debt Rule.** `aside` (`#64748B`) measures 4.20:1 on Ground and 3.85:1 on Panel —
+below WCAG AA (4.5:1) for normal text, and it carries most secondary copy. `aside-legible`
+(`#94A3B8`) measures 7.80:1 and 7.15:1. This is a recorded defect of the incumbent system, not a
+style choice; PR #17 resolves it site-wide. Do not propagate `#64748B` to new normal-size text.
+
+## Typography
+
+**Display Font:** Inter (with `system-ui`, `sans-serif`)
+**Body Font:** Inter (with `system-ui`, `sans-serif`)
+**Label Font:** Inter, differentiated by tracking and case rather than by family
+
+**Character:** A single neutral grotesque doing all five roles. The pairing contrast other systems
+get from two families, this one gets from a 700/400 weight split and a wide-tracked uppercase
+micro-label. The result is uniform and legible, and — recorded honestly — undifferentiated.
+
+### Hierarchy
+- **Display** (700, `48px` → `60px` at ≥640px, line-height 1.25, tracking `-0.025em`): page hero
+  headline. One per page, in the first viewport.
+- **Headline** (700, `30–36px`, line-height 1.25, tracking `-0.025em`): section openers.
+- **Title** (600, `20–24px`, line-height 1.4): card and panel headings.
+- **Body** (400, `16px`, line-height 1.625): paragraph copy, held to a `max-w-2xl` (672px)
+  measure, roughly 70ch.
+- **Label** (500, `12px`, tracking `0.1em`, uppercase): eyebrows, badges, metadata, table keys.
+  The most distinctive typographic move in the system.
+
+### Named Rules
+
+**The Weight-Not-Family Rule.** Hierarchy comes from weight (400 / 500 / 600 / 700) and scale.
+The system loads exactly one family; a second typeface is a change of world, not a refinement.
+
+**The Wide Label Rule.** Any text at `12px` is uppercase, weight 500, tracked to `0.1em`. Small
+type is never simply shrunken body copy.
+
+## Layout
+
+A single centered column at `max-w-6xl` (1152px) with a `24px` gutter governs every page; wide
+sections never break it. Reading passages narrow further to `max-w-2xl` (672px) and feature
+grids to `max-w-4xl` (896px), so measure is controlled independently of container width.
+
+Vertical rhythm alternates `80px` and `96px` between sections, with `32px` inside feature panels
+and `24px` inside smaller cards. Grids are shallow by intent: one column on mobile, two at
+`lg` (1024px) for the paired feature panels, three at `sm`/`md` for principle cards, with a
+uniform `24px` gap. Breakpoints are Tailwind defaults, and `sm` (640px) carries the most work —
+it is where the display size steps up and CTA rows change from stacked to inline.
+
+The page banding is the structural device: Ground and Panel alternate down the page, and the hero
+closes with a `128px` gradient fade back to Ground so the first section emerges rather than
+starts.
+
+## Elevation & Depth
+
+The system is **flat at rest and has no resting shadow anywhere**. Depth is produced by three
+non-shadow means: tonal alternation between Ground and Panel, `1px` hairline borders, and a
+`blur(12px)` backdrop filter on the navigation once scrolled. A surface that is not being touched
+casts nothing.
+
+Shadow exists only as interaction response, and only in one form.
+
+### Shadow Vocabulary
+- **Interaction glow** (`box-shadow: 0 0 30px rgba(56,189,248,0.12), 0 0 0 1px rgba(56,189,248,0.2)`):
+  applied on card hover together with `translateY(-2px)` over `0.3s ease`. It is an ambient
+  cyan bloom plus a brightened border — the card appearing to come online, not to lift.
+
+### Named Rules
+
+**The Nothing Glows At Rest Rule.** Glow is a response to the cursor. A card, badge, or button
+that emits light without being touched is broken.
+
+## Shapes
+
+Four radii, each bound to a role rather than to a size: `8px` for anything clickable, `12px` for
+standard cards, `16px` for the two large feature panels, and full-round for badges and status
+pills. The system never mixes them within one component family.
+
+Borders are always `1px` and always hairline-toned, except where a panel is deliberately promoted
+— the Labs card takes a `1px` Signal Cyan border to mark it as the live commercial path while its
+sibling keeps hairline. That single substitution is the system's only structural emphasis device.
+
+There are no rules, dividers, or separators. Where a break is needed the page changes tone.
+
+## Components
+
+### Buttons
+- **Shape:** Softly rounded (`8px`), never pill, never square.
+- **Primary:** Signal Cyan fill with Ground-colored text, `12px 28px` padding, `14px` weight 600.
+  Compact `8px 16px` variant in the navigation bar.
+- **Hover / Focus:** Background shifts to Signal Cyan Light over `200ms`. Hover is applied by
+  inline JS event handlers rather than CSS pseudo-classes, and there is **no focus-visible
+  treatment anywhere in the system** — a recorded gap, not a style.
+- **Ghost:** Transparent fill, `1px` hairline border, Read-colored text, identical geometry to
+  primary so the two align in a row.
+
+### Cards / Containers
+- **Corner Style:** `16px` for the two large feature panels, `12px` for principle and content
+  cards.
+- **Background:** Ground, placed on Panel sections — darker than their container.
+- **Border:** `1px` hairline; Signal Cyan on the single promoted card.
+- **Shadow Strategy:** none at rest; interaction glow on hover (see Elevation & Depth).
+- **Internal Padding:** `32px` for feature panels, `24px` for smaller cards.
+
+### Badges
+- **Style:** Full-round, `12px` uppercase weight-500 text tracked to `0.1em`, on a 6–8% tint of
+  its own accent with a 20–40% border of the same hue.
+- **Variants:** Signal Cyan for category and eyebrow use (`6px 16px`); Confirmation Teal for
+  resolved-state use such as availability (`4px 12px`), frequently with a leading dot or check.
+
+### Navigation
+- **Style:** Fixed full-width, `64px` tall, contents held to the `max-w-6xl` column. Transparent
+  over the hero, transitioning to `rgba(2,8,23,0.96)` with `blur(12px)` and a hairline bottom
+  border once scrolled, over `300ms`.
+- **Typography:** `14px` weight 500. Active route in Read; inactive in Aside; hover raises
+  inactive to Read via inline handlers.
+- **Mobile:** Same shell with a disclosure toggle; links stack at `10px` vertical padding and the
+  primary CTA is hidden below `md` (768px).
+
+### Signature: the dot-grid field
+A `radial-gradient` of `1px` hairline dots on a `32px` pitch, laid across the hero at 40% opacity
+beneath a `rgba(56,189,248,0.08)` elliptical glow anchored to the top edge. It is the system's
+only texture and appears on exactly one surface per page.
+
+## Do's and Don'ts
+
+### Do:
+- **Do** spend Signal Cyan only on actionable or state-bearing elements, and keep it under
+  roughly 10% of any viewport.
+- **Do** place cards in Ground on Panel sections, preserving the inverted tonal relationship.
+- **Do** carry hierarchy with weight and scale in Inter rather than reaching for a second family.
+- **Do** set any `12px` text as uppercase, weight 500, tracked `0.1em`.
+- **Do** hold body copy to a `max-w-2xl` (672px) measure regardless of container width.
+- **Do** use `#94A3B8` for new secondary text, not `#64748B` — see The Contrast Debt Rule.
+
+### Don't:
+- **Don't** introduce a resting shadow. Depth is tonal; glow is a hover response.
+- **Don't** add a third surface tone. The system is Ground and Panel only.
+- **Don't** use hairline (`#1C2E4A`) for text or Aside (`#64748B`) for anything at normal size.
+- **Don't** apply Confirmation Teal to anything a visitor can click; it reports, it does not
+  invite.
+- **Don't** add rules, dividers, or separators — change tone instead.
+- **Don't** mix radii within a component family, or make an action anything other than `8px`.
+- **Don't** load a webfont via a stylesheet `@import`. `globals.css` currently does this
+  alongside `next/font`, loading Inter twice; that is a recorded defect, not a pattern to follow.
