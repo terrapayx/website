@@ -40,7 +40,10 @@ typography:
     fontWeight: 500
     letterSpacing: "0.1em"
 rounded:
-  scrollbar: "3px"
+  # Reusable scale only. The observed one-off `3px` (::-webkit-scrollbar-thumb,
+  # globals.css:40) is deliberately NOT a key here — see Shapes and the sidecar's
+  # extensions.observedOneOffs. Presence in this map is what grants a value
+  # token status; absence is the only reliable way to withhold it.
   action: "8px"
   panel: "12px"
   feature: "16px"
@@ -133,15 +136,23 @@ plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. R
 2026-08-16 per the redesign audit. Capturing it here is what allows the next phase to treat it as
 evidence rather than as a starting point.
 
-**Independent corroboration.** Impeccable's mechanical anti-pattern detector, run over
-`globals.css` on 2026-08-16, independently flagged two of the same traits without reference to the
-audit: **Inter** as an overused face that "no longer feels distinctive" because generated UIs
-converge on it, and the `.dot-grid` field (`globals.css:49`) as a *"decorative grid-line
-background… a recurring generated-UI signature"*, appropriate only for genuine canvas, map,
-blueprint, or measurement surfaces. Two independent methods reaching the same verdict is the
-strongest evidence in this file that the visual world should be replaced rather than refined. Both
-findings are left **unfixed and unsuppressed**: they are accurate descriptions of the shipped
-system, and this document exists to record them.
+**Independent corroboration — about this system, not about these choices in general.** Impeccable's
+mechanical anti-pattern detector, run over `globals.css` on 2026-08-16, flagged two of the same
+traits the audit named, without reference to it: **Inter** as a face generated UIs converge on, and
+the `.dot-grid` field (`globals.css:49`) as a decorative grid-line background it classes as a
+recurring generated-UI signature outside genuine canvas, map, blueprint, or measurement surfaces.
+
+What this establishes is narrow and worth stating precisely: **two independent methods, applied to
+*this* codebase, reached the same reading of it** — that the surface presents as generic rather than
+particular. It is not a finding that Inter is a poor typeface, that dot-grid fields are bad
+generally, or that either must be removed. Both are defensible choices in a system that has a
+reason for them; the evidence here is that this system does not visibly have one. Whether either
+survives is a decision for the redesign brief, made in `shape` against confirmed product truth —
+not something this baseline settles.
+
+Both findings are left **unfixed and unsuppressed**. Fixing them would be a source change in a
+documentation-only capture; suppressing them would delete evidence a later verification pass should
+be able to re-derive.
 
 **Key Characteristics:**
 - Near-black navy ground with a single raised panel tone; no third surface level
@@ -294,13 +305,17 @@ ambient glow is permanent and is part of the incumbent atmosphere, not a state.
 
 ## Shapes
 
-Five radii, each bound to a role rather than to a size: `8px` for **boxed, button-like actions**
-(filled CTAs, ghost buttons, the nav CTA), `12px` for standard cards, `16px` for the two large
-feature panels, full-round for badges and status pills, and `3px` — used exactly once, on the
-`::-webkit-scrollbar-thumb` in `globals.css:40`. That last value sits outside the Tailwind radius
-scale the rest of the system uses and belongs to no component family; it is a one-off, recorded
-here for completeness rather than as a token to reuse. The system never mixes radii within one
-component family.
+The reusable radius scale has four steps, each bound to a role rather than to a size: `8px` for
+**boxed, button-like actions** (filled CTAs, ghost buttons, the nav CTA), `12px` for standard
+cards, `16px` for the two large feature panels, and full-round for badges and status pills. The
+system never mixes them within one component family.
+
+**Observed one-off — not a token.** A fifth radius value, `3px`, appears exactly once in the
+entire source: on `::-webkit-scrollbar-thumb` at `globals.css:40`. It sits outside the Tailwind
+radius scale the rest of the system uses and belongs to no component family. It is recorded here
+because the incumbent record must be complete, and it is **deliberately excluded from the
+`rounded` frontmatter map** so that no generator, linter, or agent reads its presence in the
+normative token scale as permission to apply it to a component. Do not use `3px` for anything.
 
 Radius is not a marker of clickability. Plain navigation links, inline text links, and the wordmark
 are all clickable and carry no radius, background, or border at all.

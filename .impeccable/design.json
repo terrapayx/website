@@ -14,6 +14,13 @@
     "extractedBy": "/impeccable document (scan mode, Impeccable 4.0.4)",
     "extractionIntent": "Record the SHIPPED visual system as a pre-redesign baseline so the redesign can treat it as evidence and anti-reference. Descriptive only. Nothing in this file is a target, a recommendation, or a direction to build toward.",
     "confirmedAntiReference": "The incumbent world reads as generic technical SaaS — dark navy plus cyan, dot grid, gradient glow, repeated dark cards, and Inter throughout. Recorded 2026-08-16 per the redesign audit.",
+    "corroboration": {
+      "source": "Impeccable mechanical design detector, run over src/app/globals.css 2026-08-16",
+      "findings": ["overused-font (Inter, globals.css:5 and :24)", "codex-grid-background (.dot-grid, globals.css:49)"],
+      "establishes": "Two independent methods applied to THIS codebase reached the same reading of it: the surface presents as generic rather than particular.",
+      "doesNotEstablish": "That Inter is a poor typeface, that dot-grid fields are bad generally, or that either must be removed. Both are defensible in a system that has a reason for them. Whether either survives is a decision for the redesign brief, resolved in `shape` against confirmed product truth — not settled by this baseline.",
+      "disposition": "Left unfixed and unsuppressed. No ignore rule added. Fixing would be a source change in a documentation-only capture; suppressing would delete evidence a later verification pass should be able to re-derive."
+    },
     "pendingDeltas": [
       {
         "pr": 17,
@@ -156,6 +163,21 @@
       ],
       "definedButUnused": ["xl", "2xl"]
     },
+    "observedOneOffs": [
+      {
+        "name": "scrollbar-thumb-radius",
+        "value": "3px",
+        "property": "border-radius",
+        "location": "src/app/globals.css:40 (::-webkit-scrollbar-thumb)",
+        "occurrences": 1,
+        "isToken": false,
+        "reusable": false,
+        "excludedFromFrontmatter": true,
+        "detail": "The only border-radius in the source outside the Tailwind scale, and the only radius belonging to no component family. Recorded so the incumbent record is complete.",
+        "doNotUse": "Deliberately excluded from the DESIGN.md `rounded` map. Presence in that map is what grants a value token status, so absence is the only reliable way to withhold it. Do not emit 3px for any component; the reusable radius scale is action 8px, panel 12px, feature 16px, pill 9999px.",
+        "surfacedBy": "Impeccable design detector (design-system-radius), 2026-08-16"
+      }
+    ],
     "containers": [
       { "name": "page", "value": "1152px", "purpose": "max-w-6xl — the column every page is held to." },
       { "name": "measure", "value": "672px", "purpose": "max-w-2xl — body copy measure, ~70ch." },
