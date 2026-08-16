@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Terra Pay X — Governed AI Engineering & Payments Infrastructure',
     description:
-      'Secure, observable, and operationally resilient payments infrastructure built for reliability and intelligent operations.',
+      'Governed AI engineering systems and operational controls, backed by cloud-native payments infrastructure in development.',
     images: ['/og-image.png'],
   },
 };

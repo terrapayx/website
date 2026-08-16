@@ -42,7 +42,7 @@ function Hero() {
           className="text-5xl sm:text-6xl font-bold tracking-tight leading-tight"
           style={{ color: textPrimary }}
         >
-          Terra Pay X Labs moves AI from experimentation to governed execution.
+          Terra Pay X Labs designs governed AI systems for production engineering teams.
         </h1>
 
         <p className="text-xl sm:text-2xl font-medium" style={{ color: textMuted }}>
@@ -67,7 +67,7 @@ function Hero() {
             data-observe-surface="cta"
             data-observe-id="hero-strategy-session"
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
           <Link
             href="/products/ai-engineering-starter-kit"
@@ -246,7 +246,7 @@ function Divisions() {
                 className="flex-1 inline-flex justify-center px-4 py-2.5 rounded-lg text-sm font-semibold"
                 style={{ background: accent, color: bg }}
               >
-                Book a Strategy Session
+                Request a Strategy Session
               </Link>
               <Link
                 href="/labs"
@@ -478,7 +478,7 @@ function FinalCTA() {
             className="px-7 py-3 rounded-lg text-sm font-semibold"
             style={{ background: accent, color: bg }}
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
           <Link
             href="/labs"

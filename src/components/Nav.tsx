@@ -80,7 +80,7 @@ export default function Nav() {
             onMouseEnter={(e) => (e.currentTarget.style.background = '#7DD3FC')}
             onMouseLeave={(e) => (e.currentTarget.style.background = '#38BDF8')}
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
 
           <button
@@ -131,7 +131,7 @@ export default function Nav() {
               className="flex justify-center px-4 py-3 rounded-lg text-sm font-semibold"
               style={{ background: '#38BDF8', color: '#020817' }}
             >
-              Book a Strategy Session
+              Request a Strategy Session
             </Link>
           </div>
         </div>

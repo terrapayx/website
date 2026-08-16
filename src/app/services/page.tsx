@@ -261,7 +261,7 @@ export default function ServicesPage() {
                           : { border: `1px solid ${border}`, color: textPrimary }
                       }
                     >
-                      Book a Strategy Session
+                      Request a Strategy Session
                     </Link>
                   </div>
 
@@ -327,7 +327,7 @@ export default function ServicesPage() {
             className="px-7 py-3 rounded-lg text-sm font-semibold"
             style={{ background: accent, color: bg }}
           >
-            Book a Strategy Session
+            Request a Strategy Session
           </Link>
         </div>
       </section>
